@@ -2,40 +2,41 @@
 // Создание табов для выбора Меню
 
 const tabs = ['Основное меню', 'Постное меню', 'Винная карта'];
-const tabsFragment = document.createDocumentFragment();
 
 tabs.forEach(function(tab, i){
-    const item = document.createElement('li');
-    item.classList.add('catalog__tab');    
-    item.setAttribute('onclick', `openTab(event, 'menu${i+1}')`);
-
-    const div = document.createElement('div');
-    div.classList.add('tabcontent');
-    div.setAttribute('data-toggle', 'tab');
-    div.textContent = tab;
-
-    item.appendChild(div);
-    if(i === 0) item.classList.add('active');
-    tabsFragment.appendChild(item);
+  if(i === 0){
+    document.getElementById('tabs').innerHTML += `
+    <li class="catalog__tab active" onclick="openTab(event, 'menu${i+1}')">
+      <div class="tabcontent" data-toggle="tab">Основное меню</div>
+    </li>
+    `;
+  }else{
+    document.getElementById('tabs').innerHTML += `
+    <li class="catalog__tab " onclick="openTab(event, 'menu${i+1}')">
+      <div class="tabcontent" data-toggle="tab">Основное меню</div>
+    </li>
+    `;
+  }
 });
-
-document.getElementById('tabs').appendChild(tabsFragment);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Создание содержимого меню
 
-const menuFragment = document.createDocumentFragment();
-
 tabs.forEach(function(tab, i){
-    const item = document.createElement('div');
-    item.classList.add('catalog__menu');
-    item.setAttribute('id', `menu${i+1}`);
-
-    if(i === 0) item.style.display = 'block';
-    menuFragment.appendChild(item);
+  if(i === 0){
+    document.getElementById('content').innerHTML += `
+      <div class="catalog__menu" id="menu${i+1}" style="display: block">
+          
+      </div>
+    `;
+  }else{
+    document.getElementById('content').innerHTML += `
+      <div class="catalog__menu" id="menu${i+1}" style="display: none">
+          
+      </div>
+    `;
+  }
 });
-
-document.getElementById('content').appendChild(menuFragment);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Функционал табов
@@ -79,82 +80,48 @@ fetch('./assets/menu/menu1.xlsx').then(function (res) {
   const worksheet = workbook.Sheets[first_sheet_name];
 
   const _products = XLSX.utils.sheet_to_json(worksheet, { raw: true });
-  
+
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //Coздание разметки продуктов и категорий
-  const productCategories = document.createElement('ul');
-  productCategories.classList.add('product__categories');
-  productCategories.setAttribute('id', 'categories');
-  document.getElementById('menu1').appendChild(productCategories);
+  document.getElementById('menu1').innerHTML += `
+  <ul class="product__categories" id="categories">
+  
+  </ul>
+  <div class="product__container" id="productContainer">
 
-  const productContainer = document.createElement('div');
-  productContainer.classList.add('product__container');
-  productContainer.setAttribute('id', 'productContainer');
-  document.getElementById('menu1').appendChild(productContainer);
+  </div>
+  `;
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  //создание и вывод категорий
-  const categoryFragment = document.createDocumentFragment();
+  //Создание категорий
   const _productCategories = [];
   
   //поиск уникальных категорий
   _products.forEach(function(_product, i){
     if (_productCategories.indexOf(_product.category) == -1) {
       _productCategories.push(_product.category);
-      
-      const productCategory = document.createElement('li');
-      productCategory.classList.add('product__category');
-      productCategory.textContent = _product.category;
 
-      categoryFragment.appendChild(productCategory);
+      document.getElementById('categories').innerHTML += `
+        <li class="product__category">${_product.category}</li>
+      `;
+
     }
-  });  
-  //вывод категорий
-  console.log(_productCategories);
-  document.getElementById('categories').appendChild(categoryFragment);
+  }); 
 
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   //Вывод продуктов в HTML
   _products.forEach(function(_product, i){
 
-    const productFragment = document.createDocumentFragment();
+    document.getElementById('productContainer').innerHTML += `
+    <div class="product">
+      <div class="product__title">${_product.title}</div>
+        <div class="product__records">
+          <div class="product__price">${_product.price}₽</div>
+          <div class="product__capacity">${_product.capacity}g</div>
+        </div>
+        <button class="product__btn">Заказать</button>
+    </div>
+    `;    
 
-    //product
-    const product = document.createElement('div');
-    product.classList.add('product');
-
-    //product__title
-    const productTitle = document.createElement('div');
-    productTitle.classList.add('product__title');
-    productTitle.textContent = _product.title;
-    product.appendChild(productTitle);
-
-    
-    //product__price
-    const productPrice = document.createElement('div');
-    productPrice.classList.add('product__price');
-    productPrice.textContent = `${_product.price}₽`;
-
-    //product__capacity
-    const productCapacity = document.createElement('div');
-    productCapacity.classList.add('product__capacity');
-    productCapacity.textContent = `${_product.capacity}g`
-
-    //product__records
-    const productRecords = document.createElement('div');
-    productRecords.classList.add('product__records');
-    productRecords.appendChild(productPrice);
-    productRecords.appendChild(productCapacity);
-    product.appendChild(productRecords);
-
-    //product__btn
-    const productBtn = document.createElement('button');
-    productBtn.classList.add('product__btn');
-    productBtn.textContent = "Заказать";
-    product.appendChild(productBtn);
-    
-    productContainer.appendChild(product);
-    productFragment.appendChild(productContainer);
-    document.getElementById('menu1').appendChild(productFragment);
   })
 });
