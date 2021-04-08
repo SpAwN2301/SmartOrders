@@ -7,13 +7,13 @@ menu.forEach(function(tab, i){
   if(i === 0){
     document.getElementById('tabs').innerHTML += `
     <li class="catalog__tab active" onclick="openTab(event, 'menu${i+1}')">
-      <div class="tabcontent" data-toggle="tab">Основное меню</div>
+      <div class="tabcontent" data-toggle="tab">${tab}</div>
     </li>
     `;
   }else{
     document.getElementById('tabs').innerHTML += `
     <li class="catalog__tab " onclick="openTab(event, 'menu${i+1}')">
-      <div class="tabcontent" data-toggle="tab">Основное меню</div>
+      <div class="tabcontent" data-toggle="tab">${tab}</div>
     </li>
     `;
   }
