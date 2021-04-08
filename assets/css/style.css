@@ -50,8 +50,7 @@
     box-shadow: 0 0 20px 5px black;
 }
 .catalog__menu {
-    display: none;
-    animation: fadeInUp 1s;
+    animation: fadeInUp .5s;
 }
 .product__categories{
     display: flex;
@@ -65,6 +64,7 @@
 .product__container{
     display: flex;
     flex-wrap: wrap;
+    justify-content: space-between;
 }
 .product{
     position: relative;
