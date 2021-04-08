@@ -79,7 +79,8 @@ fetch('./assets/menu/menu1.xlsx').then(function (res) {
   const worksheet = workbook.Sheets[first_sheet_name];
 
   const _products = XLSX.utils.sheet_to_json(worksheet, { raw: true });
-
+  
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //Coздание разметки продуктов и категорий
   const productCategories = document.createElement('ul');
   productCategories.classList.add('product__categories');
@@ -91,19 +92,28 @@ fetch('./assets/menu/menu1.xlsx').then(function (res) {
   productContainer.setAttribute('id', 'productContainer');
   document.getElementById('menu1').appendChild(productContainer);
 
-  //Вывод категорий
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //создание и вывод категорий
   const categoryFragment = document.createDocumentFragment();
+  const _productCategories = [];
+  
+  //поиск уникальных категорий
   _products.forEach(function(_product, i){
-    console.log(_product.category);
+    if (_productCategories.indexOf(_product.category) == -1) {
+      _productCategories.push(_product.category);
+      
+      const productCategory = document.createElement('li');
+      productCategory.classList.add('product__category');
+      productCategory.textContent = _product.category;
 
-    const productCategory = document.createElement('li');
-    productCategory.classList.add('product__category');
-    productCategory.textContent = _product.category;
-
-    categoryFragment.appendChild(productCategory);
+      categoryFragment.appendChild(productCategory);
+    }
   });  
+  //вывод категорий
+  console.log(_productCategories);
   document.getElementById('categories').appendChild(categoryFragment);
 
+  ///////////////////////////////////////////////////////////////////////////////////////////////////
   //Вывод продуктов в HTML
   _products.forEach(function(_product, i){
 
