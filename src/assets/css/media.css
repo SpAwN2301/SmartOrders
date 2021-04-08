@@ -1,5 +1,6 @@
 @media screen and (max-width: 425px){
-    .container{
-        width: auto;
+    .header, .footer {
+        display: none;
     }
+    
 }
