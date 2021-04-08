@@ -101,8 +101,9 @@ menu.forEach(function(file, i){
       if (_productCategories.indexOf(_product.category) == -1) {
         _productCategories.push(_product.category);
   
+        //создание
         document.getElementById(`categories${i+1}`).innerHTML += `
-          <li class="product__category">${_product.category}</li>
+          <li data-name='${_product.category}' class="product__category">${_product.category}</li>
         `;
   
       }
@@ -110,19 +111,33 @@ menu.forEach(function(file, i){
   
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     //Вывод продуктов в HTML
-    _products.forEach(function(_product){
-  
-      document.getElementById(`productContainer${i+1}`).innerHTML += `
-      <div class="product">
-        <div class="product__title">${_product.title}</div>
-          <div class="product__records">
-            <div class="product__price">${_product.price}₽</div>
-            <div class="product__capacity">${_product.capacity}g</div>
+   
+    document.querySelector(`[data-name="Закуски и салаты"]`).addEventListener('click', function(){
+      document.getElementById('productContainer1').style.display = "flex";
+      
+
+      _products.forEach(function(_product){
+        if (_product.category === "Закуски и салаты"){
+          document.getElementById(`productContainer${i+1}`).innerHTML += `
+          <div data-category='${_product.category}' class="product">
+            <div class="product__title">${_product.title}</div>
+            <div class="product__records">
+              <div class="product__price">${_product.price}₽</div>
+              <div class="product__capacity">${_product.capacity}g</div>
+            </div>
+            <button class="product__btn">Заказать</button>
           </div>
-          <button class="product__btn">Заказать</button>
-      </div>
-      `;    
-  
-    })
+          `;   
+        }
+         
+      })
+    });
+
+    document.getElementById('productContainer1').addEventListener('click', function(){
+      document.getElementById('productContainer1').style.display = "none";
+    });
+    
   });
 });
+
+
