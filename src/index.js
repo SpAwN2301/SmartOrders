@@ -2,6 +2,7 @@
 // Создание табов для выбора Меню
 
 const menu = ['Основное меню', 'Постное меню', 'Винная карта'];
+const productsArr = [];
 
 menu.forEach(function(tab, i){
   if(i === 0){
@@ -64,6 +65,8 @@ function openTab(evt, id) {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Парсинг меню из эксель
+const categoryArr = [];
+
 menu.forEach(function(file, i){
   fetch(`./assets/menu/menu${i+1}.xlsx`).then(function (res) {
     if (!res.ok) throw new Error("fetch failed");
@@ -88,6 +91,7 @@ menu.forEach(function(file, i){
     
     </ul>
     <div class="product__container" id="productContainer${i+1}">
+      <span class="product__close" id="close">&times;</span>
   
     </div>
     `;
@@ -105,38 +109,50 @@ menu.forEach(function(file, i){
         document.getElementById(`categories${i+1}`).innerHTML += `
           <li data-name='${_product.category}' class="product__category">${_product.category}</li>
         `;
-  
+ 
       }
     }); 
+    _productCategories.forEach(function(el, i){
+      categoryArr[i] = el;
+    })
+
   
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     //Вывод продуктов в HTML
-   
-    document.querySelector(`[data-name="Закуски и салаты"]`).addEventListener('click', function(){
-      document.getElementById('productContainer1').style.display = "flex";
-      
-
-      _products.forEach(function(_product){
-        if (_product.category === "Закуски и салаты"){
-          document.getElementById(`productContainer${i+1}`).innerHTML += `
-          <div data-category='${_product.category}' class="product">
-            <div class="product__title">${_product.title}</div>
-            <div class="product__records">
-              <div class="product__price">${_product.price}₽</div>
-              <div class="product__capacity">${_product.capacity}g</div>
-            </div>
-            <button class="product__btn">Заказать</button>
-          </div>
-          `;   
-        }
-         
-      })
+    _products.forEach(function(_product){
+      document.getElementById(`productContainer${i+1}`).innerHTML += `
+      <div data-category='${_product.category}' class="product">
+        <div class="product__title">${_product.title}</div>
+        <div class="product__records">
+          <div class="product__price">${_product.price}₽</div>
+          <div class="product__capacity">${_product.capacity}g</div>
+        </div>
+        <button class="product__btn">Заказать</button>
+      </div>
+    `;   
     });
 
-    document.getElementById('productContainer1').addEventListener('click', function(){
+    //////////////////////////////////////////////////////////////////////////////////////////////////
+    //Открыть модальное окно
+    _productCategories.forEach(function(item){
+      document.querySelector(`[data-name="${item}"]`).addEventListener('click', function(){
+        document.getElementById('productContainer1').style.display = "flex";
+        
+        document.querySelectorAll(`[data-category="${item}"]`).forEach(function(element){
+          element.style.display = 'block';
+        });
+      });
+    });
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////
+    //Закрыть модальное окно
+    document.querySelector('#close').addEventListener('click', function(){
       document.getElementById('productContainer1').style.display = "none";
+      const arr = document.getElementsByClassName('product');
+      for(let i = 0; i < arr.length; i++){
+        arr[i].style.display = "none";
+      }
     });
-    
   });
 });
 
