@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "gh-pages -d src"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -16,7 +16,7 @@
   "bugs": {
     "url": "https://github.com/SpAwN2301/SmartOrders/issues"
   },
-  "homepage": "https://SpAwN2301.github.io/SmartOrders",
+  "homepage": "https://SpAwN2301.gihub.io/SmartOrders",
   "devDependencies": {
     "gh-pages": "^3.1.0"
   }
