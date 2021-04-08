@@ -1,4 +1,5 @@
 @import "anim.css";
+@import "media.css";
 
 * {
     box-sizing: border-box;
@@ -91,6 +92,7 @@
     display: flex;
     justify-content: space-around;
     margin-top: 10px;
+    font-size: 16px;
 }
 .product .product__btn {
     position: absolute;

@@ -1,9 +1,9 @@
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Создание табов для выбора Меню
 
-const tabs = ['Основное меню', 'Постное меню', 'Винная карта'];
+const menu = ['Основное меню', 'Постное меню', 'Винная карта'];
 
-tabs.forEach(function(tab, i){
+menu.forEach(function(tab, i){
   if(i === 0){
     document.getElementById('tabs').innerHTML += `
     <li class="catalog__tab active" onclick="openTab(event, 'menu${i+1}')">
@@ -22,7 +22,7 @@ tabs.forEach(function(tab, i){
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Создание содержимого меню
 
-tabs.forEach(function(tab, i){
+menu.forEach(function(tab, i){
   if(i === 0){
     document.getElementById('content').innerHTML += `
       <div class="catalog__menu" id="menu${i+1}" style="display: block">
@@ -64,64 +64,65 @@ function openTab(evt, id) {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Парсинг меню из эксель
-
-fetch('./assets/menu/menu1.xlsx').then(function (res) {
-  if (!res.ok) throw new Error("fetch failed");
-  return res.arrayBuffer();
-})
-.then(function (ab) {
-  const data = new Uint8Array(ab);
-  const workbook = XLSX.read(data, {
-      type: "array"
-  });
-
-  const first_sheet_name = workbook.SheetNames[0];
-
-  const worksheet = workbook.Sheets[first_sheet_name];
-
-  const _products = XLSX.utils.sheet_to_json(worksheet, { raw: true });
-
-  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  //Coздание разметки продуктов и категорий
-  document.getElementById('menu1').innerHTML += `
-  <ul class="product__categories" id="categories">
-  
-  </ul>
-  <div class="product__container" id="productContainer">
-
-  </div>
-  `;
-
-  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  //Создание категорий
-  const _productCategories = [];
-  
-  //поиск уникальных категорий
-  _products.forEach(function(_product, i){
-    if (_productCategories.indexOf(_product.category) == -1) {
-      _productCategories.push(_product.category);
-
-      document.getElementById('categories').innerHTML += `
-        <li class="product__category">${_product.category}</li>
-      `;
-
-    }
-  }); 
-
-  ///////////////////////////////////////////////////////////////////////////////////////////////////
-  //Вывод продуктов в HTML
-  _products.forEach(function(_product, i){
-
-    document.getElementById('productContainer').innerHTML += `
-    <div class="product">
-      <div class="product__title">${_product.title}</div>
-        <div class="product__records">
-          <div class="product__price">${_product.price}₽</div>
-          <div class="product__capacity">${_product.capacity}g</div>
-        </div>
-        <button class="product__btn">Заказать</button>
-    </div>
-    `;    
-
+menu.forEach(function(file, i){
+  fetch(`./assets/menu/menu${i+1}.xlsx`).then(function (res) {
+    if (!res.ok) throw new Error("fetch failed");
+    return res.arrayBuffer();
   })
+  .then(function (ab) {
+    const data = new Uint8Array(ab);
+    const workbook = XLSX.read(data, {
+        type: "array"
+    });
+  
+    const first_sheet_name = workbook.SheetNames[0];
+  
+    const worksheet = workbook.Sheets[first_sheet_name];
+  
+    const _products = XLSX.utils.sheet_to_json(worksheet, { raw: true });
+  
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //Coздание разметки продуктов и категорий
+    document.getElementById(`menu${i+1}`).innerHTML += `
+    <ul class="product__categories" id="categories${i+1}">
+    
+    </ul>
+    <div class="product__container" id="productContainer${i+1}">
+  
+    </div>
+    `;
+  
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //Создание категорий
+    const _productCategories = [];
+    
+    //поиск уникальных категорий
+    _products.forEach(function(_product){
+      if (_productCategories.indexOf(_product.category) == -1) {
+        _productCategories.push(_product.category);
+  
+        document.getElementById(`categories${i+1}`).innerHTML += `
+          <li class="product__category">${_product.category}</li>
+        `;
+  
+      }
+    }); 
+  
+    ///////////////////////////////////////////////////////////////////////////////////////////////////
+    //Вывод продуктов в HTML
+    _products.forEach(function(_product){
+  
+      document.getElementById(`productContainer${i+1}`).innerHTML += `
+      <div class="product">
+        <div class="product__title">${_product.title}</div>
+          <div class="product__records">
+            <div class="product__price">${_product.price}₽</div>
+            <div class="product__capacity">${_product.capacity}g</div>
+          </div>
+          <button class="product__btn">Заказать</button>
+      </div>
+      `;    
+  
+    })
+  });
 });
