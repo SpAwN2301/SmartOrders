@@ -1,159 +1,173 @@
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Создание табов для выбора Меню
-
-const menu = ['Основное меню', 'Постное меню', 'Винная карта'];
-const productsArr = [];
-
-menu.forEach(function(tab, i){
-  if(i === 0){
-    document.getElementById('tabs').innerHTML += `
-    <li class="catalog__tab active" onclick="openTab(event, 'menu${i+1}')">
-      <div class="tabcontent" data-toggle="tab">${tab}</div>
-    </li>
-    `;
-  }else{
-    document.getElementById('tabs').innerHTML += `
-    <li class="catalog__tab " onclick="openTab(event, 'menu${i+1}')">
-      <div class="tabcontent" data-toggle="tab">${tab}</div>
-    </li>
-    `;
-  }
-});
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Создание содержимого меню
-
-menu.forEach(function(tab, i){
-  if(i === 0){
-    document.getElementById('content').innerHTML += `
-      <div class="catalog__menu" id="menu${i+1}" style="display: block">
-          
-      </div>
-    `;
-  }else{
-    document.getElementById('content').innerHTML += `
-      <div class="catalog__menu" id="menu${i+1}" style="display: none">
-          
-      </div>
-    `;
-  }
-});
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// Функционал табов
-
-function openTab(evt, id) {
-  // Declare all variables
-  let tabcontent, tablinks;
-
-  // Get all elements with class="tabcontent" and hide them
-  tabcontent = document.getElementsByClassName("catalog__menu");
-  for (let i = 0; i < tabcontent.length; i++) {
-    tabcontent[i].style.display = "none";
-  }
-
-  // Get all elements with class="tablinks" and remove the class "active"
-  tablinks = document.getElementsByClassName("catalog__tab");
-  for (let i = 0; i < tablinks.length; i++) {
-    tablinks[i].className = tablinks[i].className.replace(" active", "");
-  }
-
-  // Show the current tab, and add an "active" class to the button that opened the tab
-  document.getElementById(id).style.display = "block";
-  evt.currentTarget.className += " active";
-}
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Парсинг меню из эксель
-const categoryArr = [];
+fetch(`./assets/menu/menus.xlsx`).then(function (res) {
+  if (!res.ok) throw new Error("fetch failed");
+  return res.arrayBuffer();
+})
+.then(function (ab) {
+  const data = new Uint8Array(ab);
+  const workbook = XLSX.read(data, {
+      type: "array"
+  });
 
-menu.forEach(function(file, i){
-  fetch(`./assets/menu/menu${i+1}.xlsx`).then(function (res) {
-    if (!res.ok) throw new Error("fetch failed");
-    return res.arrayBuffer();
-  })
-  .then(function (ab) {
-    const data = new Uint8Array(ab);
-    const workbook = XLSX.read(data, {
-        type: "array"
-    });
-  
-    const first_sheet_name = workbook.SheetNames[0];
-  
-    const worksheet = workbook.Sheets[first_sheet_name];
-  
+  const menuNames = [];
+  const menusArr = [];
+
+  workbook.SheetNames.forEach(function(name){
+    menuNames.push(name);
+
+    const worksheet = workbook.Sheets[name];
     const _products = XLSX.utils.sheet_to_json(worksheet, { raw: true });
+    menusArr.push(_products);
+  });
+
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // Создание табов для выбора Меню
+  menuNames.forEach(function(menu, i){
+  if(i === 0){
+    document.getElementById('tabs').innerHTML += `
+    <li class="catalog__tab active" id="catalog__tab_${menu}">
+      <div class="tabcontent" data-toggle="tab">${menu}</div>
+    </li>
+    `;
+  }else{
+    document.getElementById('tabs').innerHTML += `
+    <li class="catalog__tab " id="catalog__tab_${menu}">
+      <div class="tabcontent" data-toggle="tab">${menu}</div>
+    </li>
+    `;
+  }
+  });
+
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // Создание содержимого меню
+
+  menuNames.forEach(function(menu, i){
+    if(i === 0){
+      document.getElementById('content').innerHTML += `
+        <div class="catalog__menu" id="catalog__menu_${menu}" style="display: block">
+            
+        </div>
+      `;
+    }else{
+      document.getElementById('content').innerHTML += `
+        <div class="catalog__menu" id="catalog__menu_${menu}" style="display: none">
+            
+        </div>
+      `;
+    }
+  });
+
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // Функционал табов
+  const tabs = document.getElementsByClassName('catalog__tab');
+
+  for(let i = 0; i < tabs.length; i++){
+    tabs[i].addEventListener('click', function(){
+
+      let tabcontent, tablinks;
+      // Get all elements with class="tabcontent" and hide them
+      tabcontent = document.getElementsByClassName("catalog__menu");
+      for (let i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+      }
+
+      // Get all elements with class="tablinks" and remove the class "active"
+      tablinks = document.getElementsByClassName("catalog__tab");
+      for (let i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+      }
+
+      // Show the current tab, and add an "active" class to the button that opened the tab
+      document.getElementById(`catalog__menu_${tabs[i].firstElementChild.textContent}`).style.display = "block";
+      tabs[i].className += " active";
+
+    })
+  }
   
-    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //Coздание разметки продуктов и категорий
-    document.getElementById(`menu${i+1}`).innerHTML += `
-    <ul class="product__categories" id="categories${i+1}">
+  ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //Coздание разметки продуктов и категорий
+  menuNames.forEach(function(menuName, i){
+    
+    document.getElementById(`catalog__menu_${menuName}`).innerHTML += `
+    <ul class="product__categories" id="product__categories_${menuName}">
     
     </ul>
-    <div class="product__container" id="productContainer${i+1}">
-      <span class="product__close" id="close">&times;</span>
+    <div class="product__container" id="product__container_${menuName}">
+      <span class="product__close"><div>&times;</div></span>
   
     </div>
     `;
-  
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //Создание категорий
-    const _productCategories = [];
-    
+  });
+
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //Создание категорий
+  menusArr.forEach(function(menu, i){
+    const categoriesArr = [];
     //поиск уникальных категорий
-    _products.forEach(function(_product){
-      if (_productCategories.indexOf(_product.category) == -1) {
-        _productCategories.push(_product.category);
-  
+    menu.forEach(function(product){
+      if(categoriesArr.indexOf(product.category) == -1){
+        categoriesArr.push(product.category);
+
         //создание
-        document.getElementById(`categories${i+1}`).innerHTML += `
-          <li data-name='${_product.category}' class="product__category">${_product.category}</li>
+        document.getElementById(`product__categories_${menuNames[i]}`).innerHTML += `
+        <li data-name='${product.category}' class="product__category">${product.category}</li>
         `;
- 
       }
-    }); 
-    _productCategories.forEach(function(el, i){
-      categoryArr[i] = el;
     })
 
-  
-    ///////////////////////////////////////////////////////////////////////////////////////////////////
-    //Вывод продуктов в HTML
-    _products.forEach(function(_product){
-      document.getElementById(`productContainer${i+1}`).innerHTML += `
-      <div data-category='${_product.category}' class="product">
-        <div class="product__title">${_product.title}</div>
+  });
+
+  ///////////////////////////////////////////////////////////////////////////////////////////////////
+  //Вывод продуктов в HTML
+  menusArr.forEach(function(menu, i){
+    menu.forEach(function(product){
+      document.getElementById(`product__container_${menuNames[i]}`).innerHTML += `
+      <div data-category='${product.category}' class="product">
+        <div class="product__title">${product.title}</div>
         <div class="product__records">
-          <div class="product__price">${_product.price}₽</div>
-          <div class="product__capacity">${_product.capacity}g</div>
+          <div class="product__price">${product.price}₽</div>
+          <div class="product__capacity">${product.capacity}g</div>
         </div>
         <button class="product__btn">Заказать</button>
       </div>
     `;   
     });
+  });
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////
-    //Открыть модальное окно
-    _productCategories.forEach(function(item){
-      document.querySelector(`[data-name="${item}"]`).addEventListener('click', function(){
-        document.getElementById('productContainer1').style.display = "flex";
-        
-        document.querySelectorAll(`[data-category="${item}"]`).forEach(function(element){
-          element.style.display = 'block';
-        });
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+  //Открыть модальное окно
+  const categoriesArr = document.getElementsByClassName('product__category');
+  console.log(categoriesArr[0].parentElement.nextElementSibling.getAttribute('id'));
+
+  for(i = 0; i < categoriesArr.length; i++){
+    const productContainer = categoriesArr[i].parentElement.nextElementSibling.getAttribute('id')
+    const dataCategory = categoriesArr[i].getAttribute('data-name');
+    
+    categoriesArr[i].addEventListener('click', function(){
+      document.getElementById(productContainer).style.display = "flex";
+      
+      document.querySelectorAll(`[data-category="${dataCategory}"]`).forEach(function(element){
+        element.style.display = 'block';
       });
     });
+  }
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////
-    //Закрыть модальное окно
-    document.querySelector('#close').addEventListener('click', function(){
-      document.getElementById('productContainer1').style.display = "none";
-      const arr = document.getElementsByClassName('product');
-      for(let i = 0; i < arr.length; i++){
-        arr[i].style.display = "none";
+  //////////////////////////////////////////////////////////////////////////////////////////////////
+  //Закрыть модальное окно
+
+  const closeModal = document.querySelectorAll('.product__close');
+
+  for(let i = 0; i < closeModal.length; i++){
+    closeModal[i].addEventListener('click', function(){
+      closeModal[i].parentElement.style.display = 'none';
+
+      const products = document.getElementsByClassName('product');
+      for(let j = 0; j < products.length; j++){
+        products[j].style.display = 'none';
       }
     });
-  });
+  }
+  
+  
 });
-
-
