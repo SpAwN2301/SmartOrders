@@ -117,7 +117,7 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
 
       //Загрузка картинки для бэкграунда
       const categoryStyle = document.querySelector(`[data-name = '${product.category}']`);
-      console.log(categoryStyle);
+
       categoryStyle.style.cssText = `
         background-image: url('./assets/img/${product.category}.jpg');
       `;
@@ -132,11 +132,19 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
       document.getElementById(`product__container_${menuNames[i]}`).innerHTML += `
       <div data-category='${product.category}' class="product">
         <div class="product__title">${product.title}</div>
-        <div class="product__records">
-          <div class="product__price">${product.price + '₽'}</div>
-          ${product.capacity !== undefined ? `<div class="product__capacity">${product.capacity + 'g'}</div>` : ''}
+        <div class="product__right">
+          <div class="product__records">
+            ${product.capacity !== undefined ? `<div class="product__capacity">${product.capacity + 'g/'}</div>` : ''}
+            <div class="product__price">${product.price + '₽'}</div>
+          </div>
+
+          <div class="product__buttons">
+            <button class="product__minus">-</button>
+            <div class="product__amount">0</div>
+            <button class="product__plus">+</button>
+          </div>
+        
         </div>
-        <button class="product__btn">Заказать</button>
       </div>
     `;   
     
@@ -156,7 +164,7 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
       document.getElementById(productContainer).style.display = "flex";
       
       document.querySelectorAll(`[data-category="${dataCategory}"]`).forEach(function(element){
-        element.style.display = 'block';
+        element.style.display = 'flex';
       });
     });
   }
@@ -177,5 +185,30 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
     });
   }
   
-  
+
+  /////////////////////////////////////////////////////////////////////////////////////////////////////
+  //Функционал кнопок
+  const plus = document.querySelectorAll('.product__plus');
+  const minus = document.querySelectorAll('.product__minus');
+
+
+  for(let i = 0; i < minus.length; i++){
+    minus[i].addEventListener('click', function(){
+      let amount = parseInt(minus[i].nextElementSibling.textContent);
+
+      if(amount > 0){
+        amount--;
+        minus[i].nextElementSibling.textContent = amount;
+      }
+    })
+  }
+
+  for(let i = 0; i < plus.length; i++){
+    plus[i].addEventListener('click', function(){
+      let amount = parseInt(plus[i].previousElementSibling.textContent);
+      amount++;
+      plus[i].previousElementSibling.textContent = amount;
+    })
+  }
+
 });
