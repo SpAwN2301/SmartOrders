@@ -126,19 +126,20 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
       <div data-category='${product.category}' class="product">
         <div class="product__title">${product.title}</div>
         <div class="product__records">
-          <div class="product__price">${product.price}₽</div>
-          <div class="product__capacity">${product.capacity}g</div>
+          <div class="product__price">${product.price + '₽'}</div>
+          ${product.capacity !== undefined ? `<div class="product__capacity">${product.capacity + 'g'}</div>` : ''}
         </div>
         <button class="product__btn">Заказать</button>
       </div>
     `;   
+    
+    
     });
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
   //Открыть модальное окно
   const categoriesArr = document.getElementsByClassName('product__category');
-  console.log(categoriesArr[0].parentElement.nextElementSibling.getAttribute('id'));
 
   for(i = 0; i < categoriesArr.length; i++){
     const productContainer = categoriesArr[i].parentElement.nextElementSibling.getAttribute('id')
