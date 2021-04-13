@@ -8,17 +8,18 @@
 }
 
 .container {
-    max-width: 950px;
-    margin: 0 auto;
+    /* max-width: 950px;
+    margin: 0 auto; */
 }
 .catalog {
-    background: #e4e4e4 center center / cover no-repeat;
+    background: url('../img/background.jpg') center center / cover no-repeat;
     min-height: 100vh;
-    padding: 50px;
+    padding: 50px 0;
 }
 .catalog__title {
     text-align: center;
     font-size: 50px;
+    color: white;
     margin-bottom: 25px;
 }
 .catalog__tabs {
@@ -31,8 +32,8 @@
     padding: 10px;
     margin: 10px;
     font-size: 20px;
-    color: black;
-    border: black 2px solid;
+    color: white;
+    border: white 2px solid;
     transform: skew(-35deg);
     transition: all .5s;
 }
@@ -45,32 +46,48 @@
 }
 .catalog__tab.active {
     transition: all 1s;
-    background: black;
-    color: white;
+    background: white;
+    color: black;
 }
 .catalog__tab.active:hover {
-    box-shadow: 0 0 20px 5px black;
+    box-shadow: 0 0 20px 5px white;
 }
 .catalog__menu {
     margin-top: 50px;
     padding: 20px 0;
-    border: black 2px solid;
-    border-radius: 20px;
+    /* border: black 2px solid;
+    border-radius: 20px; */
     animation: fadeInUp .5s;
 }
 .product__categories{
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    flex-direction: column;
 }
 .product__category {
-    border: black 2px solid;
-    border-radius: 30px;
+    /* border: black 2px solid;
+    border-radius: 30px; */
+    
+    height: 50vh;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+   
+
     list-style-type: none;
     cursor: pointer;
-    margin: 10px 10px;
-    padding: 10px;
-    font-size: 20px;
+    margin: 10px 0;
+    padding: 10px 0;
+}
+.product__category div{
+    transform: translateY(50%);
+
+    text-align: center;
+    color: white;
+    font-size: 50px;
+
+    background-color: rgba(0,0,0,0.7);
 }
 .product__container{
     display: none; /* Hidden by default */
@@ -78,7 +95,7 @@
     justify-content: center;
     position: fixed; /* Stay in place */
     z-index: 1; /* Sit on top */
-    padding-top: 100px; /* Location of the box */
+    padding: 120px 0; /* Location of the box */
     left: 0;
     top: 0;
     width: 100%; /* Full width */

@@ -111,9 +111,16 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
 
         //создание
         document.getElementById(`product__categories_${menuNames[i]}`).innerHTML += `
-        <li data-name='${product.category}' class="product__category">${product.category}</li>
+        <li data-name='${product.category}' class="product__category"><div>${product.category}</div></li>
         `;
       }
+
+      //Загрузка картинки для бэкграунда
+      const categoryStyle = document.querySelector(`[data-name = '${product.category}']`);
+      console.log(categoryStyle);
+      categoryStyle.style.cssText = `
+        background-image: url('./assets/img/${product.category}.jpg');
+      `;
     })
 
   });
