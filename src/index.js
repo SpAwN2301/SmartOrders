@@ -222,9 +222,13 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
     if(headerState){
       headerState = false;
       document.getElementById('header').style.transform = 'translateY(-100%)';
+      document.getElementById('closeOrder').style.display = 'none';
+      document.getElementsByClassName('header__cart-icon')[0].style.display = 'block';
     }else{
       headerState = true;
       document.getElementById('header').style.transform = 'translateX(0%)';
+      document.getElementById('closeOrder').style.display = 'block';
+      document.getElementsByClassName('header__cart-icon')[0].style.display = 'none';
     }
   });
 
