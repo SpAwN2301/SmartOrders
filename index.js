@@ -217,14 +217,14 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //Слайдер
   let headerState = false;
-  document.getElementById('slider').addEventListener('touchend', function(){
+  document.getElementById('slider').addEventListener('click', function(){
 
     if(headerState){
       headerState = false;
-      document.getElementById('header').style.transform = 'translateY(-95%)';
+      document.getElementById('header').style.transform = 'translateY(-100%)';
     }else{
       headerState = true;
-      document.getElementById('header').style.transform = 'translateY(0%)';
+      document.getElementById('header').style.transform = 'translateX(0%)';
     }
   });
 
@@ -236,9 +236,9 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
     for(let i = 0; i < amountArr.length; i++){
       if(amountArr[i].textContent !== '0'){
         document.getElementById('cartProducts').innerHTML += `
-          <div class="cart__product">
-            <div class="cart__product-title">${amountArr[i].parentElement.parentElement.parentElement.firstElementChild.textContent}</div>
-            <div class="cart__product-amount">${amountArr[i].textContent}</div>
+          <div class="order__product">
+            <div class="order__product-title">${amountArr[i].parentElement.parentElement.parentElement.firstElementChild.textContent}</div>
+            <div class="order__product-amount">${amountArr[i].textContent}шт.</div>
           </div>
         `;
       }

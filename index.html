@@ -13,21 +13,14 @@ src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.15.1/xlsx.full.min.js"></scri
 <body>
 
     <header class="header" id="header">
-        <div class="cart">
-            <div class="cart__title">Ваш заказ</div>
-            <div class="cart__products" id="cartProducts">
-
-
-            </div>
+        <div class="order">
+            <div class="order__title">Ваш заказ</div>
+            <div class="order__products" id="cartProducts"></div>
         </div>
         
-        <div class="header_bottom">
-            <div class="header__slide" id="slider">
-                <hr>
-                <div></div>
-                <div></div>
-                <div></div>
-                <hr>
+        <div class="header__cart">
+            <div class="header__cart-wrapper" id="slider">
+                <img src="./assets/icons/cart.svg" alt="" class="header__cart-icon">
             </div>
         </div>
     </header>
@@ -35,11 +28,9 @@ src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.15.1/xlsx.full.min.js"></scri
     <section class="catalog">
         <div class="container">
             <h1 class="catalog__title">Praktika by DARVIN</h1>
-            <ul class="catalog__tabs" id="tabs">
-            </ul>
+            <ul class="catalog__tabs" id="tabs"></ul>
             
-            <div class="catalog__content" id="content">
-            </div>
+            <div class="catalog__content" id="content"></div>
         </div>
     </section>
 
