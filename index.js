@@ -101,7 +101,7 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
   });
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  //Создание категорий
+  //Создание категорий  
   menusArr.forEach(function(menu, i){
     const categoriesArr = [];
     //поиск уникальных категорий
@@ -176,22 +176,24 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
 
   for(let i = 0; i < closeModal.length; i++){
     closeModal[i].addEventListener('click', function(){
-      closeModal[i].parentElement.style.display = 'none';
 
       const products = document.getElementsByClassName('product');
       for(let j = 0; j < products.length; j++){
         products[j].style.display = 'none';
       }
+   
+      closeModal[i].parentElement.style.display = 'none';
+      createCart();
     });
   }
   
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////
-  //Функционал кнопок
+  //Функционал кнопок заказа
   const plus = document.querySelectorAll('.product__plus');
   const minus = document.querySelectorAll('.product__minus');
 
-
+  //Уменьшить кол-во позиций
   for(let i = 0; i < minus.length; i++){
     minus[i].addEventListener('click', function(){
       let amount = parseInt(minus[i].nextElementSibling.textContent);
@@ -203,6 +205,7 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
     })
   }
 
+  //Увеличить кол-во позиций
   for(let i = 0; i < plus.length; i++){
     plus[i].addEventListener('click', function(){
       let amount = parseInt(plus[i].previousElementSibling.textContent);
@@ -211,4 +214,35 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
     })
   }
 
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //Слайдер
+  let headerState = false;
+  document.getElementById('slider').addEventListener('touchend', function(){
+
+    if(headerState){
+      headerState = false;
+      document.getElementById('header').style.transform = 'translateY(-95%)';
+    }else{
+      headerState = true;
+      document.getElementById('header').style.transform = 'translateY(0%)';
+    }
+  });
+
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //Создание корзины
+  function createCart(){
+    document.getElementById('cartProducts').innerHTML = '';
+    const amountArr = document.getElementsByClassName('product__amount');
+    for(let i = 0; i < amountArr.length; i++){
+      if(amountArr[i].textContent !== '0'){
+        document.getElementById('cartProducts').innerHTML += `
+          <div class="cart__product">
+            <div class="cart__product-title">${amountArr[i].parentElement.parentElement.parentElement.firstElementChild.textContent}</div>
+            <div class="cart__product-amount">${amountArr[i].textContent}</div>
+          </div>
+        `;
+      }
+    }
+  }
+  
 });
