@@ -225,16 +225,16 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
       document.getElementById('header').style.transform = 'translateY(-100%)';
 
       //поменять иконку
-      document.getElementsByClassName('header__close-order')[0].style.display = 'none';
-      document.getElementsByClassName('header__cart-icon')[0].style.display = 'block';
+      document.getElementsByClassName('header__closeBtn-order')[0].style.display = 'none';
+      document.getElementsByClassName('header__cartBtn-icon')[0].style.display = 'block';
 
     }else{
       headerState = true;
       //опустить
       document.getElementById('header').style.transform = 'translateX(0%)';
       //поменять иконку
-      document.getElementsByClassName('header__close-order')[0].style.display = 'block';
-      document.getElementsByClassName('header__cart-icon')[0].style.display = 'none';
+      document.getElementsByClassName('header__closeBtn-order')[0].style.display = 'block';
+      document.getElementsByClassName('header__cartBtn-icon')[0].style.display = 'none';
     }
   });
 
