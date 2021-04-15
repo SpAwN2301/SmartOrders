@@ -92,7 +92,7 @@ menu.forEach(function(file, i){
     
     </ul>
     <div class="product__container" id="productContainer${i+1}">
-      <span class="product__close" id="close"><div>&times;</div></span>
+      <span class="close-product" id="close"><div>&times;</div></span>
   
     </div>
     `;
