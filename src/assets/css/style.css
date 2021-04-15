@@ -19,9 +19,8 @@
 }
 .header .header__cart{
     position: absolute;
-    bottom: -5vh;
-    left: 50%;
-    transform: translateX(-50%);
+    bottom: -7vh;
+    right: 2vh;
 }
 
 .header .header__cart-wrapper{
@@ -36,10 +35,11 @@
     border-radius: 100%;
     padding: 5px;
 }
-#closeOrder{
+.header .header__close-order{
     display: none;
-    color: black;
-    font-size: 40px;
+    width: 100%;
+    height: 100%;
+    padding: 5px;
     animation: fadeIn .2s;
 }
 .header .header__cart-icon{
