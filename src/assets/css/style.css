@@ -17,13 +17,13 @@
     transform: translateY(-100%);
     transition: all .5s;
 }
-.header .header__cart{
+.header .header__cartBtn{
     position: absolute;
     bottom: -7vh;
     right: 2vh;
 }
 
-.header .header__cart-wrapper{
+.header .header__cartBtn-wrapper{
     display: flex;
     justify-content: center;
     align-items: center;
@@ -35,14 +35,14 @@
     border-radius: 100%;
     padding: 5px;
 }
-.header .header__close-order{
+.header .header__closeBtn-order{
     display: none;
     width: 100%;
     height: 100%;
     padding: 5px;
     animation: fadeIn .2s;
 }
-.header .header__cart-icon{
+.header .header__cartBtn-icon{
     width: 30px;
     height: 30px;
     animation: fadeIn .2s;
