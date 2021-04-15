@@ -135,7 +135,7 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
         <div class="product__right">
           <div class="product__records">
             ${product.capacity !== undefined ? `<div class="product__capacity">${product.capacity + 'g/'}</div>` : ''}
-            <div class="product__price">${product.price + '₽'}</div>
+            <div class="product__price">${product.price + 'Р'}</div>
           </div>
 
           <div class="product__buttons">
