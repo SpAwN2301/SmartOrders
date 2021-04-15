@@ -60,8 +60,17 @@
     color: white;
     text-align: center;
 }
-.order__products{
+.order .order__product{
     padding: 5px;
+}
+.order .order__products{
+    padding: 5px;
+}
+.order .order__empty-text{
+    margin: 50px 20px 20px 20px;
+    font-size: 20px;
+    text-align: center;
+    color: white;
 }
 .order__product{
     display: flex;
