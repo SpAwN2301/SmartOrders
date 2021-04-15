@@ -241,18 +241,46 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //Создание корзины
   function createCart(){
+    let finalPrice = 0;
+
+    //Очистка старого заказа
     document.getElementById('cartProducts').innerHTML = '';
+    document.getElementById('orderFinal').innerHTML = '';
+
+    //Вывод выбранных товаров в корзину
     const amountArr = document.getElementsByClassName('product__amount');
     for(let i = 0; i < amountArr.length; i++){
       if(amountArr[i].textContent !== '0'){
         document.getElementById('cartProducts').innerHTML += `
           <div class="order__product">
             <div class="order__product-title">${amountArr[i].parentElement.parentElement.parentElement.firstElementChild.textContent}</div>
-            <div class="order__product-amount">${amountArr[i].textContent}шт.</div>
+            <div class="order__product-amount">${amountArr[i].textContent}</div>
           </div>
         `;
       }
     }
+
+    const orderedProductsArr = document.getElementsByClassName('order__product-title');
+    const orderedProductsPriceArr = document.getElementsByClassName('order__product-amount');
+
+    for(let i = 0; i < orderedProductsArr.length; i++){
+      menusArr.forEach(function(menu){
+        menu.forEach(function(product){
+          if(orderedProductsArr[i].textContent === product.title){
+            finalPrice += product.price * orderedProductsPriceArr[i].textContent;
+          }
+        });
+      });
+    }
+
+    //Создание финальной суммы заказа
+    document.getElementById('orderFinal').innerHTML += `
+      <div class="order__final-wrapper">
+        <div class="order__final-text">Итог: </div>
+        <div class="order__final-price">${finalPrice}р</div>
+      </div>
+      <div class="order__final-btn">Оформить заказ</div>
+    `
   }
   
 });
