@@ -94,8 +94,9 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
     
     </ul>
     <div class="product__container" id="product__container_${menuName}">
-      <span class="product__close"><div>&times;</div></span>
-  
+      <div class="close-product__wrapper">
+        <div class="close-product">×</div>
+      </div>
     </div>
     `;
   });
@@ -135,7 +136,7 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
         <div class="product__right">
           <div class="product__records">
             ${product.capacity !== undefined ? `<div class="product__capacity">${product.capacity + 'g/'}</div>` : ''}
-            <div class="product__price">${product.price + 'Р'}</div>
+            <div class="product__price">${product.price + 'р'}</div>
           </div>
 
           <div class="product__buttons">
@@ -172,7 +173,7 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
   //////////////////////////////////////////////////////////////////////////////////////////////////
   //Закрыть модальное окно
 
-  const closeModal = document.querySelectorAll('.product__close');
+  const closeModal = document.querySelectorAll('.close-product__wrapper');
 
   for(let i = 0; i < closeModal.length; i++){
     closeModal[i].addEventListener('click', function(){

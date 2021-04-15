@@ -2,6 +2,7 @@
 @import "media.css";
 
 * {
+    font-family: 'Raleway', sans-serif;
     box-sizing: border-box;
     margin: 0;
     padding: 0;
@@ -56,15 +57,19 @@
 }
 .order .order__title{
     margin-top: 20px;
+
+    font-weight: 900;
     font-size: 40px;
-    color: white;
     text-align: center;
+
+    color: white;
 }
 .order .order__products{
     padding: 5px;
 }
 .order .order__empty-text{
     margin: 50px 20px 20px 20px;
+    font-weight: 100;
     font-size: 20px;
     text-align: center;
     color: white;
@@ -107,6 +112,7 @@
     padding: 50px 0;
 }
 .catalog__title {
+    font-weight: 900;
     text-align: center;
     font-size: 50px;
     color: black;
@@ -124,6 +130,8 @@
     padding: 10px;
     margin: 10px 30px;
 
+    text-align: center;
+    font-weight: 500;
     font-size: 20px;
     color: black;
     border: black 2px solid;
@@ -131,9 +139,6 @@
     transition: all .5s;
 }
 
-.catalog__tab div{
-    text-align: center;
-}
 .catalog__tab.active {
     transition: all 1s;
     background: black;
@@ -171,9 +176,10 @@
 .product__category div{
     transform: translateY(50%);
 
+    font-weight: 500;
     text-align: center;
     color: white;
-    font-size: 50px;
+    font-size: 40px;
 
     background-color: rgba(0,0,0,0.7);
 }
@@ -197,25 +203,24 @@
 
     animation: fadeIn .5s;
 }
-.product__close{
+.close-product__wrapper{
     position: fixed;
     z-index: 1;
-    bottom: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 10vh;
+    width: 30px;
+    height: 30px;
+    background-color: rgba(255,255,255, 1);
+    border-radius: 100%;
+    box-shadow: 0 0 5px 5px snow;
 }
-.product__close div{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 5px;
+.close-product {
+    text-align: center;
+    font-size: 66px;
+    font-weight: 100;
 
-    background-color: rgba(0,0,0, 0.5);
-
-    font-size: 60px;
-    line-height: .5;
-    cursor: pointer;
-    color: white;
-        
-    border-radius: 50%;
+    line-height: 0.3;
 }
 .product{
     position: relative;
