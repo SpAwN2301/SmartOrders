@@ -9,6 +9,54 @@
     
     -webkit-tap-highlight-color: transparent; /*убрать подсветку при тапе*/
 }
+
+.preloader {
+
+    position: fixed;
+
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+
+    background: #e0e0e0;
+    z-index: 1001;
+  }
+.preloader__row {
+    position: relative;
+    top: 50%;
+    left: 50%;
+    width: 70px;
+    height: 70px;
+    margin-top: -35px;
+    margin-left: -35px;
+    text-align: center;
+    animation: preloader-rotate 2s infinite linear;
+}
+.preloader__item {
+    position: absolute;
+    display: inline-block;
+    top: 0;
+    background-color: #337ab7;
+    border-radius: 100%;
+    width: 35px;
+    height: 35px;
+    animation: preloader-bounce 2s infinite ease-in-out;
+}
+.preloader__item:last-child {
+    top: auto;
+    bottom: 0;
+    animation-delay: -1s;
+}
+.loaded_hiding .preloader {
+    transition: 0.3s opacity;
+    opacity: 0;
+}
+
+.loaded .preloader {
+    display: none;
+}
+
 .header{
     position: fixed;
     z-index: 1;
@@ -58,7 +106,7 @@
 .order .order__title{
     margin-top: 20px;
 
-    font-weight: 900;
+    font-weight: 300;
     font-size: 40px;
     text-align: center;
 
@@ -112,7 +160,7 @@
     padding: 50px 0;
 }
 .catalog__title {
-    font-weight: 900;
+    font-weight: 300;
     text-align: center;
     font-size: 50px;
     color: black;
@@ -131,7 +179,7 @@
     margin: 10px 30px;
 
     text-align: center;
-    font-weight: 500;
+    font-weight: 300;
     font-size: 20px;
     color: black;
     border: black 2px solid;
@@ -141,7 +189,7 @@
 
 .catalog__tab.active {
     transition: all 1s;
-    background: black;
+    background: dimgrey;
     color: white;
 }
 
@@ -176,7 +224,7 @@
 .product__category div{
     transform: translateY(50%);
 
-    font-weight: 500;
+    font-weight: 300;
     text-align: center;
     color: white;
     font-size: 40px;
@@ -244,6 +292,8 @@
 }
 .product .product__title{
     margin-top: 10px;
+
+    font-weight: 300;
     font-size: 20px;
     width: 50%;
 }
@@ -251,12 +301,14 @@
     display: flex;
     justify-content: space-around;
     margin-top: 10px;
+    font-weight: 300;
     font-size: 20px;
 }
 .product .product__buttons{
     display: flex;
     justify-content: center;
     font-size: 20px;
+    font-weight: 300;
 }
 .product .product__buttons .product__minus, .product .product__buttons .product__plus{
     cursor: pointer;
