@@ -251,13 +251,18 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //Создание корзины
+  let finalPrice = 0; //итоговая стоимость заказа
+  let finalAmount = 0; //кол-во товаров в заказе
+  const orderedProductsArr = []; //массив объектов с заказанными товарами
+
   function createCart(){
-    let finalPrice = 0;
-    let finalAmount = 0;
 
     //Очистка старого заказа
     document.getElementById('cartProducts').innerHTML = '';
     document.getElementById('orderFinal').innerHTML = '';
+    orderedProductsArr.length = 0;
+    finalAmount = 0;
+    finalPrice = 0;
 
     //Вывод выбранных товаров в корзину
     const amountArr = document.getElementsByClassName('product__amount');
@@ -270,8 +275,12 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
         //Вывод товаров на страницу заказа
         document.getElementById('cartProducts').innerHTML += `
           <div class="order__product">
-            <div class="order__product-title">${amountArr[i].parentElement.parentElement.parentElement.firstElementChild.textContent}</div>
-            <div class="order__product-amount">${amountArr[i].textContent}</div>
+            <div class="order__product-title">${document.getElementsByClassName('product__title')[i].textContent}</div>
+            <div class="order__product-wrapper">
+              <div class="order__product-amount">${amountArr[i].textContent}</div>
+              <span>x</span>
+              <div class="order__product-price">${document.getElementsByClassName('product__price')[i].textContent}</div>
+            </div>
           </div>
         `;
       }
@@ -280,21 +289,24 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////
-    //Создаем массив выбранных товаров и проверяем их на соответствие с таблицей на случай форматирования HTML кода
-    const orderedProductsArr = document.getElementsByClassName('order__product-title');
-    const orderedProductsPriceArr = document.getElementsByClassName('order__product-amount');
+    //Создаем массив выбранных товаров на основе .order
+    const orderedProductsHTML = document.getElementsByClassName('order__product');
 
-    for(let i = 0; i < orderedProductsArr.length; i++){
-      menusArr.forEach(function(menu){
-        menu.forEach(function(product){
-          if(orderedProductsArr[i].textContent === product.title){
-            finalPrice += product.price * orderedProductsPriceArr[i].textContent;
-          }
-        });
-      });
+    for(let i = 0; i < orderedProductsHTML.length; i++){
+      let orderedProduct = {};
+      orderedProduct.title = orderedProductsHTML[i].getElementsByClassName('order__product-title')[0].textContent;
+      orderedProduct.price = orderedProductsHTML[i].getElementsByClassName('order__product-price')[0].textContent;
+      orderedProduct.amount = orderedProductsHTML[i].getElementsByClassName('order__product-amount')[0].textContent;
+      orderedProductsArr.push(orderedProduct);
     }
 
+    
     //Создание финальной суммы заказа
+    orderedProductsArr.forEach(function(orderedProduct){
+      let productPrice = parseInt(orderedProduct.price.slice(0, -1));
+      finalPrice += productPrice * orderedProduct.amount;
+    });
+
     document.getElementById('orderFinal').innerHTML += `
       <div class="order__final-wrapper">
         <div class="order__final-text">Итог: </div>
