@@ -236,16 +236,16 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
       document.getElementById('header').style.transform = 'translateY(-100%)';
 
       //поменять иконку
-      document.getElementsByClassName('header__closeBtn-order')[0].style.display = 'none';
-      document.getElementsByClassName('header__cartBtn-icon')[0].style.display = 'block';
+      document.getElementsByClassName('cartBtn__close')[0].style.display = 'none';
+      document.getElementsByClassName('cartBtn__icon')[0].style.display = 'block';
 
     }else{
       headerState = true;
       //опустить
       document.getElementById('header').style.transform = 'translateX(0%)';
       //поменять иконку
-      document.getElementsByClassName('header__closeBtn-order')[0].style.display = 'block';
-      document.getElementsByClassName('header__cartBtn-icon')[0].style.display = 'none';
+      document.getElementsByClassName('cartBtn__close')[0].style.display = 'block';
+      document.getElementsByClassName('cartBtn__icon')[0].style.display = 'none';
     }
   });
 
@@ -253,6 +253,7 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
   //Создание корзины
   function createCart(){
     let finalPrice = 0;
+    let finalAmount = 0;
 
     //Очистка старого заказа
     document.getElementById('cartProducts').innerHTML = '';
@@ -262,6 +263,10 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
     const amountArr = document.getElementsByClassName('product__amount');
     for(let i = 0; i < amountArr.length; i++){
       if(amountArr[i].textContent !== '0'){
+        //Вывод финального количества товаров
+        finalAmount += parseInt(amountArr[i].textContent);
+        document.getElementsByClassName('cartBtn__amount')[0].textContent = finalAmount;
+
         document.getElementById('cartProducts').innerHTML += `
           <div class="order__product">
             <div class="order__product-title">${amountArr[i].parentElement.parentElement.parentElement.firstElementChild.textContent}</div>
@@ -271,6 +276,8 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
       }
     }
 
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+    //Создаем массив выбранных товаров и проверяем их на соответствие с таблицей на случай форматирования HTML кода
     const orderedProductsArr = document.getElementsByClassName('order__product-title');
     const orderedProductsPriceArr = document.getElementsByClassName('order__product-amount');
 
