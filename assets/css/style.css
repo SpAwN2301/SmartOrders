@@ -132,12 +132,15 @@
 .order .order__product{
     display: flex;
     justify-content: space-between;
-}
-.order .order__product-title, .order .order__product-amount{
+
     color: white;
 }
+
 .order__product-title{
     width: 50%;
+}
+.order__product-wrapper{
+    display: flex;
 }
 .order .order__final{
     position: absolute;
@@ -260,7 +263,7 @@
 }
 .close-product__wrapper{
     position: fixed;
-    z-index: 1;
+    z-index: 2;
     left: 50%;
     transform: translateX(-50%);
     bottom: 10vh;
@@ -313,7 +316,7 @@
 }
 .product .product__buttons{
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
     font-size: 20px;
     font-weight: 300;
 }
