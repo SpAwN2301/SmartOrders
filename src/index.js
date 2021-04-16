@@ -263,10 +263,11 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
     const amountArr = document.getElementsByClassName('product__amount');
     for(let i = 0; i < amountArr.length; i++){
       if(amountArr[i].textContent !== '0'){
-        //Вывод финального количества товаров
+        
+        //Подсчет финального количества товаров
         finalAmount += parseInt(amountArr[i].textContent);
-        document.getElementsByClassName('cartBtn__amount')[0].textContent = finalAmount;
 
+        //Вывод товаров на страницу заказа
         document.getElementById('cartProducts').innerHTML += `
           <div class="order__product">
             <div class="order__product-title">${amountArr[i].parentElement.parentElement.parentElement.firstElementChild.textContent}</div>
@@ -274,6 +275,8 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
           </div>
         `;
       }
+        //Вывод финального количества товаров
+      document.getElementsByClassName('cartBtn__amount')[0].textContent = finalAmount;
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////
