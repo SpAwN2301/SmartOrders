@@ -17,6 +17,8 @@ window.onload = function () {
   }, 500);
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//Остальная разметка
 document.body.innerHTML += `
   <header class="header" id="header">
     <div class="container">
@@ -84,7 +86,7 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
   });
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  // Создание табов для выбора Меню
+  //Создание табов для выбора Меню
   menuNames.forEach(function(menu, i){
   if(i === 0){
     document.getElementById('tabs').innerHTML += `
@@ -102,7 +104,7 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
   });
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  // Создание содержимого меню
+  //Создание содержимого меню
 
   menuNames.forEach(function(menu, i){
     if(i === 0){
@@ -121,7 +123,7 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
   });
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  // Функционал табов
+  //Функционал табов
   const tabs = document.getElementsByClassName('catalog__tab');
 
   for(let i = 0; i < tabs.length; i++){
@@ -402,7 +404,18 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
 
     //////////////////////////////////////////////////
     //Отправка заказа в базу данных
-    console.log(productsPush);
+    fetch('https://smartorders-200c8-default-rtdb.firebaseio.com/orders.json', {
+      method: 'POST',
+      body: JSON.stringify(productsPush),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(response => response.json())
+    .then(response => {
+      console.log(response);
+    })
+
   });
   
 });
