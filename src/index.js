@@ -168,13 +168,13 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
   const categoriesArr = document.getElementsByClassName('product__category');
 
   for(i = 0; i < categoriesArr.length; i++){
-    const productContainer = categoriesArr[i].parentElement.nextElementSibling.getAttribute('id')
+    const productContainer = categoriesArr[i].closest('.catalog__menu').querySelector('.product__container');
     const dataCategory = categoriesArr[i].getAttribute('data-name');
     
     categoriesArr[i].addEventListener('click', function(){
-      document.getElementById(productContainer).style.display = "flex";
+      productContainer.style.display = "flex";
       
-      document.querySelectorAll(`[data-category="${dataCategory}"]`).forEach(function(element){
+      productContainer.querySelectorAll(`[data-category="${dataCategory}"]`).forEach(function(element){
         element.style.display = 'flex';
       });
     });
@@ -182,18 +182,20 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
   //Закрыть модальное окно
+  
+  const modal = document.getElementsByClassName('product__container');
 
-  const closeModal = document.querySelectorAll('.close-product__wrapper');
+  for(let i = 0; i < modal.length; i++){
+    const closeBtn = modal[i].querySelector('.close-product__wrapper');
 
-  for(let i = 0; i < closeModal.length; i++){
-    closeModal[i].addEventListener('click', function(){
+    closeBtn.addEventListener('click', function(){
+      const products = modal[i].querySelectorAll('.product');
 
-      const products = document.getElementsByClassName('product');
       for(let j = 0; j < products.length; j++){
         products[j].style.display = 'none';
       }
-   
-      closeModal[i].parentElement.style.display = 'none';
+
+      modal[i].style.display = 'none';
       createCart();
     });
   }
