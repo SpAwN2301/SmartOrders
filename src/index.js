@@ -34,7 +34,7 @@ document.body.innerHTML += `
                     <div class="order__final-text">Итог: </div>
                     <div class="order__final-price" id="finalPrice"></div>
                 </div>
-                <div class="order__final-btn" id="submitBtn">Оформить заказ</div>
+                <button type="submit" class="order__final-btn" id="submitBtn">Оформить заказ</button>
             </div>
         </div>
         
@@ -371,8 +371,11 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //Проверка заказанных товаров на наличие в таблице (на случай изменений в коде элемента)
-  document.getElementById('submitBtn').addEventListener('click', function(){
-    const productsPush = [];
+  const submitBtn = document.getElementById('submitBtn').addEventListener('click', function(){
+    //Отключаем кнопку для предотвращения спама
+    document.querySelector('#submitBtn').setAttribute("disabled", "disabled");
+
+    const productsPush = []; //финальный массив, который будет отправлен на сервер
 
     orderedProductsArr.forEach(function(orderedProduct){
       let titleIs = false;
@@ -413,7 +416,32 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
     })
     .then(response => response.json())
     .then(response => {
-      console.log(response);
+      
+      let date1 = new Date();
+
+      let x = setInterval(function(){
+        let now = new Date().getTime();
+
+        let distance = now - date1;
+
+        let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        document.body.innerHTML = `
+        <section class="timer">
+          <div class="container">
+              <div class="timer__title">Время ожидания заказа:</div>
+              <div class="timer__time">
+                ${minutes < 10 ? '0' + minutes : minutes}
+                :
+                ${seconds < 10 ? '0' + seconds : seconds}
+              </div>
+          </div>
+        </section>
+      `
+
+      }, 1000);
+
     })
 
   });
