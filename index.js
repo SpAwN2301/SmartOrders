@@ -404,17 +404,7 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
 
     //////////////////////////////////////////////////
     //Отправка заказа в базу данных
-    fetch('https://smartorders-200c8-default-rtdb.firebaseio.com/orders.json', {
-      method: 'POST',
-      body: JSON.stringify(productsPush),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-    .then(response => response.json())
-    .then(response => {
-      console.log(response);
-    })
+    
 
   });
   
