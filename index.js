@@ -1,5 +1,14 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 //Прелоадер
+document.body.innerHTML += `
+  <div class="preloader">
+  <div class="preloader__row">
+    <div class="preloader__item"></div>
+    <div class="preloader__item"></div>
+  </div>
+  </div>
+`
+
 window.onload = function () {
   document.body.classList.add('loaded_hiding');
   window.setTimeout(function () {
@@ -7,6 +16,49 @@ window.onload = function () {
     document.body.classList.remove('loaded_hiding');
   }, 500);
 }
+
+document.body.innerHTML += `
+  <header class="header" id="header">
+    <div class="container">
+        <div class="order">
+            <div class="order__title">Ваш заказ</div>
+            <div class="order__products" id="cartProducts">
+                <div class="order__empty-text">Вы ещё не сформировали заказ :(<br><br>
+                    Выберите одно из предложенных меню и закажите блюда из необходимых категорий
+                </div>
+            </div>
+            <div class="order__final" id="orderFinal">
+                <div class="order__final-wrapper">
+                    <div class="order__final-text">Итог: </div>
+                    <div class="order__final-price" id="finalPrice"></div>
+                </div>
+                <div class="order__final-btn" id="submitBtn">Оформить заказ</div>
+            </div>
+        </div>
+        
+        <div class="cartBtn">
+            <div class="cartBtn__wrapper" id="slider">
+                <div class="cartBtn__close">
+                    <img src="./assets/icons/closeOrder.svg" alt="">
+                </div>
+                <div class="cartBtn__icon">
+                    <div class="cartBtn__amount"></div>
+                    <img src="./assets/icons/cart.svg" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+  </header>
+
+  <section class="catalog">
+    <div class="container">
+      <h1 class="catalog__title">Praktika by DARVIN</h1>
+      <ul class="catalog__tabs" id="tabs"></ul>
+      
+      <div class="catalog__content" id="content"></div>
+    </div>
+  </section>
+`
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Парсинг меню из эксель
@@ -258,10 +310,12 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
   const orderedProductsArr = []; //массив объектов с заказанными товарами
 
   function createCart(){
+    //Создание итоговой суммы кнопки принятия заказа
+    document.getElementsByClassName('order__final-wrapper')[0].style.display = 'flex';
+    document.getElementById('submitBtn').style.display = 'block';
 
     //Очистка старого заказа
     document.getElementById('cartProducts').innerHTML = '';
-    document.getElementById('orderFinal').innerHTML = '';
     orderedProductsArr.length = 0;
     finalAmount = 0;
     finalPrice = 0;
@@ -273,6 +327,8 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
         
         //Подсчет финального количества товаров
         finalAmount += parseInt(amountArr[i].textContent);
+        //Вывод финального количества товаров
+        document.getElementsByClassName('cartBtn__amount')[0].textContent = finalAmount;
 
         //Вывод товаров на страницу заказа
         document.getElementById('cartProducts').innerHTML += `
@@ -286,8 +342,7 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
           </div>
         `;
       }
-        //Вывод финального количества товаров
-      document.getElementsByClassName('cartBtn__amount')[0].textContent = finalAmount;
+        
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -302,20 +357,52 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
       orderedProductsArr.push(orderedProduct);
     }
 
-    
     //Создание финальной суммы заказа
     orderedProductsArr.forEach(function(orderedProduct){
       let productPrice = parseInt(orderedProduct.price.slice(0, -1));
       finalPrice += productPrice * orderedProduct.amount;
     });
 
-    document.getElementById('orderFinal').innerHTML += `
-      <div class="order__final-wrapper">
-        <div class="order__final-text">Итог: </div>
-        <div class="order__final-price">${finalPrice}р</div>
-      </div>
-      <div class="order__final-btn">Оформить заказ</div>
-    `
+    document.getElementById('finalPrice').textContent = finalPrice + 'р'; 
+    
   }
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //Проверка заказанных товаров на наличие в таблице (на случай изменений в коде элемента)
+  document.getElementById('submitBtn').addEventListener('click', function(){
+    const productsPush = [];
+
+    orderedProductsArr.forEach(function(orderedProduct){
+      let titleIs = false;
+      let priceIs = false;
+
+      menusArr.forEach(function(menu){
+        menu.forEach(function(product){
+          if(orderedProduct.title === product.title){
+
+            console.log(`${orderedProduct.title} was finded`);
+            titleIs = true;
+
+            if(parseInt(orderedProduct.price.slice(0, -1)) == product.price){
+              console.log(`${orderedProduct.price} is correct price`);
+              priceIs = true;
+            }
+          }
+        });
+      });
+
+      if(titleIs && priceIs){
+        productsPush.push(orderedProduct);
+        console.log('Продукт прошел проверку');
+      }else{
+        console.log('Внешнее вмешательство в код');
+      }
+
+    });
+
+    //////////////////////////////////////////////////
+    //Отправка заказа в базу данных
+    console.log(productsPush);
+  });
   
 });

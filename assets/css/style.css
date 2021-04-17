@@ -152,10 +152,11 @@
 .order .order__final-wrapper{
     padding: 0 5px;
 
-    display: flex;
+    display: none;
     justify-content: space-between;
 }
 .order .order__final-btn{
+    display: none;
     text-align: center;
     border: whitesmoke 2px solid;
 }
