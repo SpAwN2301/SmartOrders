@@ -166,7 +166,7 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
   });
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
-  //Открыть модальное окно
+  //Открыть модальное окно категории
   const categoriesArr = document.getElementsByClassName('product__category');
 
   for(i = 0; i < categoriesArr.length; i++){
@@ -183,7 +183,7 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
   }
 
   //////////////////////////////////////////////////////////////////////////////////////////////////
-  //Закрыть модальное окно
+  //Закрыть модальное окно категории 
   
   const modal = document.getElementsByClassName('product__container');
 
@@ -202,6 +202,28 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
     });
   }
   
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //Модальное окно авторизации  
+  // When the user clicks on the button, open the modal
+  const loginModal = document.querySelector('#loginModal');
+  document.getElementsByClassName('header__loginBtn')[0].addEventListener('click', function(){
+    loginModal.style.display = "block";
+  });
+  
+  // When the user clicks on <span> (x), close the modal
+  document.getElementsByClassName("loginModal__close")[0].addEventListener('click', function(){
+    loginModal.style.display = "none";
+    loginModal.getElementsByClassName('loginModal__mail')[0].value = '';
+    loginModal.getElementsByClassName('loginModal__password')[0].value = '';
+  });
+
+  loginModal.addEventListener('submit', function(e){
+    e.preventDefault();
+  });
+  loginModal.getElementsByClassName('loginModal__submit')[0].addEventListener('click', function(){
+    console.log('submit');
+  });
+
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////
   //Функционал кнопок заказа
@@ -355,7 +377,6 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
     })
     .then(response => response.json())
     .then(response => {
-      console.log(response);
       
       let date1 = new Date();
 
