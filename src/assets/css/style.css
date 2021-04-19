@@ -60,6 +60,50 @@
     font-weight: 100;
     font-size: 30px;
 }
+.header{
+    padding: 3px;
+    position: sticky;
+    z-index: 1;
+    top: 0;
+
+    width: 100%;
+    min-height: 36px;
+
+    background-color: white;
+}
+.header .header__wrapper{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.header .header__loginBtn{
+    padding: 3px;
+    background-color: whitesmoke;
+    outline: none;
+    width: 30px;
+    height: 30px;
+    border: 0;
+    border-radius: 100%;
+}
+.header .header__table{
+    font-size: 16px;
+}
+.header .header__check-orderBtn{
+    position: relative;
+    padding: 3px;
+    background-color: whitesmoke;
+    outline: none;
+    width: 30px;
+    height: 30px;
+    border: 0;
+    border-radius: 100%;
+}
+.header .header__check-orderBtn img{
+    position: absolute;
+    bottom: 2px;
+    left: 3px;
+    width: 70%;
+}
 
 .cartBtn{
     position: absolute;
@@ -81,7 +125,6 @@
     padding: 5px;
 }
 .cartBtn__close{
-    display: none;
     width: 100%;
     height: 100%;
     padding: 5px;
@@ -93,21 +136,22 @@
     height: 100%;
     animation: fadeIn .2s;
 }
-.cartBtn__amount{
+.header .header__product-amount{
     position: absolute;
-    top: 25%;
+    top: 0;
     left: 50%;
-    transform: translateX(-35%);
+    transform: translateX(-50%);
     font-size: 10px;
 }
 .preview{
+    top: 0;
     display: none;
     position: fixed;
     z-index: 1;
     width: 100%;
     min-height: 45vh;
     background-color:rgba(0,0,0, 0.99);
-    transform: translateY(-100%);
+    transform: translateY(-120%);
     transition: all .5s;
 }
 .preview__order{
@@ -171,6 +215,29 @@
     text-align: center;
     border: whitesmoke 2px solid;
 }
+.preview .preview__close{
+    position: relative;
+
+    padding: 3px;
+
+    background-color: whitesmoke;
+    outline: none;
+    width: 30px;
+    height: 30px;
+    border: 0;
+    border-radius: 100%;
+}
+.preview .preview__close-wrapper{
+    position: absolute;
+    right: 5px;
+    bottom: -35px;
+    background: none;
+    outline: none;
+    border: none;
+}
+.preview .preview__close img{
+    width: 70%;
+}
 
 .container {
     /* max-width: 950px;
@@ -178,9 +245,9 @@
 }
 .catalog {
     display: none;
-    background: whitesmoke;
+    background: white;
     min-height: 100vh;
-    padding: 50px 0;
+    padding: 20px 0;
 }
 .catalog__title {
     font-weight: 300;

@@ -15,10 +15,23 @@
           <div class="start__title">Ваш столик: </div>
           <form id="startForm" class="start__form" action="#">
             <input name="table" required type="number">
-            <button class="start__submitBtn">Сделать заказ</button>
+            <button class="start__submitBtn">Далее</button>
           </form>
         </div>
     </section>
+    
+    <header class="header">
+        <div class="container">
+            <div class="header__wrapper">
+                <button class="header__loginBtn">S</button>
+                <div class="header__table"></div>
+                <button class="header__check-orderBtn">
+                    <div class="header__product-amount"></div>
+                    <img src="./assets/icons/cart.svg" alt="">
+                </button>
+            </div>
+        </div>
+    </header>
     
     <section class="preview" id="preview">
         <div class="container">
@@ -37,18 +50,12 @@
                     <button type="submit" class="preview__final-btn" id="submitBtn">Оформить заказ</button>
                 </div>
             </div>
-            
-            <div class="cartBtn">
-                <div class="cartBtn__wrapper" id="slider">
-                    <div class="cartBtn__close">
-                        <img src="./assets/icons/closeOrder.svg" alt="">
-                    </div>
-                    <div class="cartBtn__icon">
-                        <div class="cartBtn__amount"></div>
-                        <img src="./assets/icons/cart.svg" alt="">
-                    </div>
-                </div>
+            <div class="preview__close-wrapper">
+                <button class="preview__close">
+                    <img src="./assets/icons/closeOrder.svg" alt="">
+                </button>
             </div>
+            
         </div>
     </section>
 

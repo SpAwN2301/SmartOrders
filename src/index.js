@@ -5,8 +5,8 @@ document.querySelector('#startForm').addEventListener('submit', function(e){
   document.querySelector('.preview').style.display = 'block';
   document.querySelector('.catalog').style.display = 'block';
   tableNum = document.querySelector('[name=table]').value;
+  document.querySelector('.header__table').textContent = 'Столик ' + tableNum;
 });
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Парсинг меню из эксель
 fetch(`./assets/menu/menus.xlsx`).then(function (res) {
@@ -230,28 +230,18 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
   }
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  //Слайдер
-  let headerState = false;
-  document.getElementById('slider').addEventListener('click', function(){
+  //Корзина с заказами
 
-    if(headerState){
-      headerState = false;
-      //вернуть обратно наверх
-      document.getElementById('preview').style.transform = 'translateY(-100%)';
-
-      //поменять иконку
-      document.getElementsByClassName('cartBtn__close')[0].style.display = 'none';
-      document.getElementsByClassName('cartBtn__icon')[0].style.display = 'block';
-
-    }else{
-      headerState = true;
-      //опустить
-      document.getElementById('preview').style.transform = 'translateX(0%)';
-      //поменять иконку
-      document.getElementsByClassName('cartBtn__close')[0].style.display = 'block';
-      document.getElementsByClassName('cartBtn__icon')[0].style.display = 'none';
-    }
+  //опустить
+  document.querySelector('.header__check-orderBtn').addEventListener('click', function(){
+    document.getElementById('preview').style.transform = 'translateX(0%)';  
   });
+  
+  //вернуть обратно наверх
+  document.querySelector('.preview__close').addEventListener('click', function(){
+    document.getElementById('preview').style.transform = 'translateY(-120%)';
+  });
+
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //Создание корзины
@@ -265,6 +255,7 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
     document.getElementById('submitBtn').style.display = 'block';
 
     //Очистка старого заказа
+    document.getElementsByClassName('header__product-amount')[0].textContent = '';
     document.getElementById('cartProducts').innerHTML = '';
     orderedProductsArr.length = 0;
     finalAmount = 0;
@@ -278,7 +269,7 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
         //Подсчет финального количества товаров
         finalAmount += parseInt(amountArr[i].textContent);
         //Вывод финального количества товаров
-        document.getElementsByClassName('cartBtn__amount')[0].textContent = finalAmount;
+        document.getElementsByClassName('header__product-amount')[0].textContent = finalAmount;
 
         //Вывод товаров на страницу заказа
         document.getElementById('cartProducts').innerHTML += `
