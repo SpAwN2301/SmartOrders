@@ -1,66 +1,11 @@
-///////////////////////////////////////////////////////////////////////////////////////////////////////
-//Прелоадер
-document.body.innerHTML += `
-  <div class="preloader">
-  <div class="preloader__row">
-    <div class="preloader__item"></div>
-    <div class="preloader__item"></div>
-  </div>
-  </div>
-`
-
-window.onload = function () {
-  document.body.classList.add('loaded_hiding');
-  window.setTimeout(function () {
-    document.body.classList.add('loaded');
-    document.body.classList.remove('loaded_hiding');
-  }, 500);
-}
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//Остальная разметка
-document.body.innerHTML += `
-  <header class="header" id="header">
-    <div class="container">
-        <div class="order">
-            <div class="order__title">Ваш заказ</div>
-            <div class="order__products" id="cartProducts">
-                <div class="order__empty-text">Вы ещё не сформировали заказ :(<br><br>
-                    Выберите одно из предложенных меню и закажите блюда из необходимых категорий
-                </div>
-            </div>
-            <div class="order__final" id="orderFinal">
-                <div class="order__final-wrapper">
-                    <div class="order__final-text">Итог: </div>
-                    <div class="order__final-price" id="finalPrice"></div>
-                </div>
-                <button type="submit" class="order__final-btn" id="submitBtn">Оформить заказ</button>
-            </div>
-        </div>
-        
-        <div class="cartBtn">
-            <div class="cartBtn__wrapper" id="slider">
-                <div class="cartBtn__close">
-                    <img src="./assets/icons/closeOrder.svg" alt="">
-                </div>
-                <div class="cartBtn__icon">
-                    <div class="cartBtn__amount"></div>
-                    <img src="./assets/icons/cart.svg" alt="">
-                </div>
-            </div>
-        </div>
-    </div>
-  </header>
-
-  <section class="catalog">
-    <div class="container">
-      <h1 class="catalog__title">Praktika by DARVIN</h1>
-      <ul class="catalog__tabs" id="tabs"></ul>
-      
-      <div class="catalog__content" id="content"></div>
-    </div>
-  </section>
-`
+let tableNum = '';
+document.querySelector('#startForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  document.querySelector('.start').style.display = 'none';
+  document.querySelector('.preview').style.display = 'block';
+  document.querySelector('.catalog').style.display = 'block';
+  tableNum = document.querySelector('[name=table]').value;
+});
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Парсинг меню из эксель
@@ -84,6 +29,9 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
     const _products = XLSX.utils.sheet_to_json(worksheet, { raw: true });
     menusArr.push(_products);
   });
+
+
+  
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //Создание табов для выбора Меню
@@ -289,7 +237,7 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
     if(headerState){
       headerState = false;
       //вернуть обратно наверх
-      document.getElementById('header').style.transform = 'translateY(-100%)';
+      document.getElementById('preview').style.transform = 'translateY(-100%)';
 
       //поменять иконку
       document.getElementsByClassName('cartBtn__close')[0].style.display = 'none';
@@ -298,7 +246,7 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
     }else{
       headerState = true;
       //опустить
-      document.getElementById('header').style.transform = 'translateX(0%)';
+      document.getElementById('preview').style.transform = 'translateX(0%)';
       //поменять иконку
       document.getElementsByClassName('cartBtn__close')[0].style.display = 'block';
       document.getElementsByClassName('cartBtn__icon')[0].style.display = 'none';
@@ -313,7 +261,7 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
 
   function createCart(){
     //Создание итоговой суммы кнопки принятия заказа
-    document.getElementsByClassName('order__final-wrapper')[0].style.display = 'flex';
+    document.getElementsByClassName('preview__final-wrapper')[0].style.display = 'flex';
     document.getElementById('submitBtn').style.display = 'block';
 
     //Очистка старого заказа
@@ -334,12 +282,12 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
 
         //Вывод товаров на страницу заказа
         document.getElementById('cartProducts').innerHTML += `
-          <div class="order__product">
-            <div class="order__product-title">${document.getElementsByClassName('product__title')[i].textContent}</div>
-            <div class="order__product-wrapper">
-              <div class="order__product-amount">${amountArr[i].textContent}</div>
+          <div class="preview__product">
+            <div class="preview__product-title">${document.getElementsByClassName('product__title')[i].textContent}</div>
+            <div class="preview__product-wrapper">
+              <div class="preview__product-amount">${amountArr[i].textContent}</div>
               <span>x</span>
-              <div class="order__product-price">${document.getElementsByClassName('product__price')[i].textContent}</div>
+              <div class="preview__product-price">${document.getElementsByClassName('product__price')[i].textContent}</div>
             </div>
           </div>
         `;
@@ -348,14 +296,14 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////
-    //Создаем массив выбранных товаров на основе .order
-    const orderedProductsHTML = document.getElementsByClassName('order__product');
+    //Создаем массив выбранных товаров на основе .preview__order
+    const orderedProductsHTML = document.getElementsByClassName('preview__product');
 
     for(let i = 0; i < orderedProductsHTML.length; i++){
       let orderedProduct = {};
-      orderedProduct.title = orderedProductsHTML[i].getElementsByClassName('order__product-title')[0].textContent;
-      orderedProduct.price = orderedProductsHTML[i].getElementsByClassName('order__product-price')[0].textContent;
-      orderedProduct.amount = orderedProductsHTML[i].getElementsByClassName('order__product-amount')[0].textContent;
+      orderedProduct.title = orderedProductsHTML[i].getElementsByClassName('preview__product-title')[0].textContent;
+      orderedProduct.price = orderedProductsHTML[i].getElementsByClassName('preview__product-price')[0].textContent;
+      orderedProduct.amount = orderedProductsHTML[i].getElementsByClassName('preview__product-amount')[0].textContent;
       orderedProductsArr.push(orderedProduct);
     }
 
@@ -407,7 +355,7 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
 
     //////////////////////////////////////////////////
     //Отправка заказа в базу данных
-    fetch('https://smartorders-200c8-default-rtdb.firebaseio.com/orders.json', {
+    fetch('https://smartorders-200c8-default-rtdb.firebaseio.com/Praktika/gruzinka/orders.json', {
       method: 'POST',
       body: JSON.stringify(productsPush),
       headers: {
@@ -416,6 +364,7 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
     })
     .then(response => response.json())
     .then(response => {
+      console.log(response);
       
       let date1 = new Date();
 
