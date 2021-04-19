@@ -15,7 +15,7 @@
           <div class="start__title">Ваш столик: </div>
           <form id="startForm" class="start__form" action="#">
             <input name="table" required type="number">
-            <button class="start__submitBtn">Далее</button>
+            <input type="submit" class="start__submitBtn" value="Далее">
           </form>
         </div>
     </section>
@@ -24,6 +24,25 @@
         <div class="container">
             <div class="header__wrapper">
                 <button class="header__loginBtn">S</button>
+                <div class="loginModal" id="loginModal">
+                    <div class="loginModal__content">
+                        <div class="loginModal__text">Здравствуйте!</div>
+                        <div class="loginModal__close">
+                            <div class="close-product">×</div>
+                        </div>
+                        <form action="#" class="loginModal__form">
+                            <div class="loginModal__group">
+                                <input type="mail" required class="loginModal__mail">
+                                <label>Почта</label>
+                            </div>
+                            <div class="loginModal__group">
+                                <input type="password" required class="loginModal__password">
+                                <label>Пароль</label>
+                            </div>
+                            <input type="submit" class="loginModal__submit" value="Войти">
+                        </form>
+                    </div>
+                </div>
                 <div class="header__table"></div>
                 <button class="header__check-orderBtn">
                     <div class="header__product-amount"></div>
