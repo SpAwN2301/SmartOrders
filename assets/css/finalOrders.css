@@ -1,14 +1,6 @@
-/*
-* Prefixed by https://autoprefixer.github.io
-* PostCSS: v7.0.29,
-* Autoprefixer: v9.7.6
-* Browsers: last 4 version
-*/
-
 .order{
     padding: 20px 10px;
 }
-.order .order__container{}
 .order .order__wrapper{
     margin: 40px auto;
     padding: 10px;

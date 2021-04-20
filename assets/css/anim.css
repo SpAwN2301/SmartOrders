@@ -1,17 +1,4 @@
-/*
-* Prefixed by https://autoprefixer.github.io
-* PostCSS: v7.0.29,
-* Autoprefixer: v9.7.6
-* Browsers: last 4 version
-*/
-
-@charset "UTF-8";/*!
- * animate.css - https://animate.style/
- * Version - 4.1.1
- * Licensed under the MIT license - http://opensource.org/licenses/MIT
- *
- * Copyright (c) 2020 Animate.css
- */
+@charset "UTF-8";
 :root {
   --animate-duration: 1s;
   --animate-delay: 1s;
