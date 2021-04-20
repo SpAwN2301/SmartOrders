@@ -463,6 +463,10 @@
     text-align: center;
     margin-bottom: 30px;
 }
+.loginModal .loginModal__text .error{
+    color: red;
+    font-weight: 500;
+}
 .loginModal .loginModal__close {
     color: #aaa;
     font-size: 28px;

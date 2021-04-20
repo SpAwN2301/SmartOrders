@@ -219,11 +219,72 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
 
   loginModal.addEventListener('submit', function(e){
     e.preventDefault();
+    e.target.querySelector('.loginModal__submit').disabled = true;
+    const email = e.target.querySelector('.loginModal__mail').value;
+    const password = e.target.querySelector('.loginModal__password').value;
+
+    authWithEmailAndPassword(email, password)
+      .then(token => {
+        if(!token){
+          return Promise.resolve('<p class="error">Неверный логин или пароль</p>')
+        }
+        return fetch(`https://smartorders-200c8-default-rtdb.firebaseio.com/Praktika/gruzinka/orders.json?auth=${token}`)
+          .then(response => response.json())
+          .then(response => {
+            if(response && response.error){
+              return '<p class="error">Неверный логин или пароль</p>'
+            }
+
+            return response ? Object.keys(response).map(key => ({
+              ...response[key],
+              id: key
+            })) : []
+          })
+      })
+      .then(renderModalAfterAuth)
+      .then(() => e.target.querySelector('.loginModal__submit').disabled = false)
   });
   loginModal.getElementsByClassName('loginModal__submit')[0].addEventListener('click', function(){
     console.log('submit');
   });
-
+  
+  ///////////////////////////////////
+  //авторизация через почту и пароль
+  function authWithEmailAndPassword(email, password){
+    const apiKey = 'AIzaSyDK4uSbO1e3Wuzgl24q_j4lsYGV4gqr5Oo';
+    return fetch(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${apiKey}`, {
+      method: 'POST',
+      body: JSON.stringify({
+        email, password,
+        returnSecureToken: true
+      }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    .then(response => response.json())
+    .then(data => data.idToken)
+  }
+  ////////////////////////////////////////
+  //Рендер модального окна после авторизации
+  function renderModalAfterAuth(content){
+    if(typeof content === 'string'){
+      document.getElementsByClassName('loginModal__text')[0].innerHTML = content;
+    }else{
+      
+      document.body.innerHTML = '';
+      content.forEach(function(order){
+        document.body.innerHTML += `
+          <section class="order">
+            <div class="container">
+              <div class="order__table">${order[0]}</div>
+            </div>
+          </section>
+        `
+      })
+      console.log('end');
+    }
+  }
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////
   //Функционал кнопок заказа
@@ -337,6 +398,7 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
     document.querySelector('#submitBtn').setAttribute("disabled", "disabled");
 
     const productsPush = []; //финальный массив, который будет отправлен на сервер
+    productsPush.push(tableNum);
 
     orderedProductsArr.forEach(function(orderedProduct){
       let titleIs = false;
