@@ -309,6 +309,7 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
           document.getElementById('orderContainer').innerHTML += `
           <div id='${order.id}' class="order__wrapper">
             <div class="order__table">Столик ${order[0]}</div>
+            <div class="order__delete">X</div>
           </div>
           `
           //содержимое заказа
@@ -324,6 +325,22 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
 
         
       })
+
+      //удалить заказ
+      const deleteOrder = document.getElementsByClassName('order__delete');
+      for(let i = 0; i < deleteOrder.length; i++){
+        deleteOrder[i].addEventListener('click', function(){
+          let id = deleteOrder[i].parentElement.getAttribute('id');
+          console.log(id);
+          deleteOrder[i].parentElement.remove();
+          deleteOrderFromDB(id);
+        });
+      }
+      function deleteOrderFromDB(id){
+        return fetch(`https://smartorders-200c8-default-rtdb.firebaseio.com/Praktika/gruzinka/orders/${id}.json`, {
+          method: 'DELETE'
+        })
+      }
 
       //зачеркнуть нажатое название
       const titleOnClick = document.getElementsByClassName('order__title');
