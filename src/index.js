@@ -235,6 +235,15 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
           e.target.querySelector('.loginModal__submit').disabled = false;
 
           getOrder(token);
+          
+          //создание разметки
+          document.body.innerHTML = `
+          <section class="order">
+            <div class="container">
+              <div class="order__container" id="orderContainer"></div>
+            </div>
+          </section>
+          `
           let r = setInterval(function(){
             getOrder(token);
           }, 30000)
@@ -285,33 +294,38 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
     if(typeof content === 'string'){
       document.getElementsByClassName('loginModal__text')[0].innerHTML = content;
     }else{
-      //создание разметки
-      document.body.innerHTML = `
-      <section class="order">
-        <div class="container">
-          <div class="order__container" id="orderContainer"></div>
-        </div>
-      </section>
-      `
-      //обертка каждого заказа + номер столика
+      console.log(content);
+      
+      
       content.forEach(function(order){
-        document.getElementById('orderContainer').innerHTML += `
-          <div class="order__wrapper">
+        console.log(order.id);
+        if(document.getElementById(order.id)){
+          console.log(document.getElementById(order.id).getAttribute('id'));
+          console.log('Order exist');
+
+        }else{
+          console.log('new order');
+          //обертка каждого заказа + номер столика
+          document.getElementById('orderContainer').innerHTML += `
+          <div id='${order.id}' class="order__wrapper">
             <div class="order__table">Столик ${order[0]}</div>
           </div>
-        `
-        //содержимое заказа
-        for(let j = 1; j < Object.keys(order).length-1; j++){
-          document.querySelector('.order__wrapper:last-child').innerHTML+= `
-            <div class="order__product">
-              <div class="order__title">${order[j].title}</div>
-              <div class="order__amount">${order[j].amount}</div>
-            </div>
           `
+          //содержимое заказа
+          for(let j = 1; j < Object.keys(order).length-1; j++){
+            document.querySelector('.order__wrapper:last-child').innerHTML+= `
+              <div class="order__product">
+                <div class="order__title">${order[j].title}</div>
+                <div class="order__amount">${order[j].amount}</div>
+              </div>
+            `
+          }
         }
+
+        
       })
 
-
+      //зачеркнуть нажатое название
       const titleOnClick = document.getElementsByClassName('order__title');
       for(let i = 0; i < titleOnClick.length; i++){
         let titleIsClick = false;
