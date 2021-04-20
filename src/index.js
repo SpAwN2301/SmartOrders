@@ -262,7 +262,7 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
     })
     .then(renderModalAfterAuth)
   }
-  ///////////////////////////////////
+  /////////////////////////////////////////////////////
   //авторизация через почту и пароль
   function authWithEmailAndPassword(email, password){
     const apiKey = 'AIzaSyDK4uSbO1e3Wuzgl24q_j4lsYGV4gqr5Oo';
@@ -279,24 +279,53 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
     .then(response => response.json())
     .then(data => data.idToken)
   }
-  ////////////////////////////////////////
+  //////////////////////////////////////////////////////////////////////
   //Рендер модального окна после авторизации
   function renderModalAfterAuth(content){
     if(typeof content === 'string'){
       document.getElementsByClassName('loginModal__text')[0].innerHTML = content;
     }else{
-      
-      document.body.innerHTML = '';
+      //создание разметки
+      document.body.innerHTML = `
+      <section class="order">
+        <div class="container">
+          <div class="order__container" id="orderContainer"></div>
+        </div>
+      </section>
+      `
+      //обертка каждого заказа + номер столика
       content.forEach(function(order){
-        document.body.innerHTML += `
-          <section class="order">
-            <div class="container">
-              <div class="order__table">${order[0]}</div>
-            </div>
-          </section>
+        document.getElementById('orderContainer').innerHTML += `
+          <div class="order__wrapper">
+            <div class="order__table">Столик ${order[0]}</div>
+          </div>
         `
+        //содержимое заказа
+        for(let j = 1; j < Object.keys(order).length-1; j++){
+          document.querySelector('.order__wrapper:last-child').innerHTML+= `
+            <div class="order__product">
+              <div class="order__title">${order[j].title}</div>
+              <div class="order__amount">${order[j].amount}</div>
+            </div>
+          `
+        }
       })
-      console.log('end');
+
+
+      const titleOnClick = document.getElementsByClassName('order__title');
+      for(let i = 0; i < titleOnClick.length; i++){
+        let titleIsClick = false;
+        titleOnClick[i].addEventListener('click', function(){
+          if(!titleIsClick){
+            titleOnClick[i].style.textDecoration = 'line-through';
+            titleIsClick = true;
+          }else{
+            titleOnClick[i].style.textDecoration = 'none';
+            titleIsClick = false;
+          }
+          
+        });
+      }
     }
   }
 
