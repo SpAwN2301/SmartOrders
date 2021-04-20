@@ -2,8 +2,6 @@ let tableNum = '';
 document.querySelector('#startForm').addEventListener('submit', function(e){
   e.preventDefault();
   document.querySelector('.start').style.display = 'none';
-  document.querySelector('.preview').style.display = 'block';
-  document.querySelector('.catalog').style.display = 'block';
   tableNum = document.querySelector('[name=table]').value;
   document.querySelector('.header__table').textContent = 'Столик ' + tableNum;
 });
