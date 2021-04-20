@@ -169,7 +169,6 @@
 }
 .preview{
     top: 0;
-    display: none;
     position: fixed;
     z-index: 1;
     width: 100%;
@@ -276,7 +275,6 @@
 }
 
 .catalog {
-    display: none;
     background: white;
     min-height: 100vh;
     padding: 20px 0;
