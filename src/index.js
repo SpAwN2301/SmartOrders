@@ -223,31 +223,45 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
     const email = e.target.querySelector('.loginModal__mail').value;
     const password = e.target.querySelector('.loginModal__password').value;
 
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//авотризация
     authWithEmailAndPassword(email, password)
       .then(token => {
         if(!token){
-          return Promise.resolve('<p class="error">Неверный логин или пароль</p>')
-        }
-        return fetch(`https://smartorders-200c8-default-rtdb.firebaseio.com/Praktika/gruzinka/orders.json?auth=${token}`)
-          .then(response => response.json())
-          .then(response => {
-            if(response && response.error){
-              return '<p class="error">Неверный логин или пароль</p>'
-            }
+          console.log('Uncorrect login');
+          e.target.querySelector('.loginModal__submit').disabled = false;
+        }else{
+          console.log('Correct');
+          e.target.querySelector('.loginModal__submit').disabled = false;
 
-            return response ? Object.keys(response).map(key => ({
-              ...response[key],
-              id: key
-            })) : []
-          })
+          getOrder(token);
+          let r = setInterval(function(){
+            getOrder(token);
+          }, 30000)
+          
+        }
+        
       })
-      .then(renderModalAfterAuth)
-      .then(() => e.target.querySelector('.loginModal__submit').disabled = false)
+      
   });
   loginModal.getElementsByClassName('loginModal__submit')[0].addEventListener('click', function(){
     console.log('submit');
   });
-  
+  function getOrder(token){
+    return fetch(`https://smartorders-200c8-default-rtdb.firebaseio.com/Praktika/gruzinka/orders.json?auth=${token}`)
+    .then(response => response.json())
+    .then(response => {
+      if(response && response.error){
+        return '<p class="error">Неверный логин или пароль</p>'
+      }
+
+      return response ? Object.keys(response).map(key => ({
+        ...response[key],
+        id: key
+      })) : []
+    })
+    .then(renderModalAfterAuth)
+  }
   ///////////////////////////////////
   //авторизация через почту и пароль
   function authWithEmailAndPassword(email, password){
