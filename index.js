@@ -1,10 +1,4 @@
-let tableNum = '';
-document.querySelector('#startForm').addEventListener('submit', function(e){
-  e.preventDefault();
-  document.querySelector('.start').style.display = 'none';
-  tableNum = document.querySelector('[name=table]').value;
-  document.querySelector('.header__table').textContent = 'Столик ' + tableNum;
-});
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Парсинг меню из эксель
 fetch(`./assets/menu/menus.xlsx`).then(function (res) {
@@ -28,7 +22,15 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
     menusArr.push(_products);
   });
 
-
+  let tableNum = '';
+  document.querySelector('#startForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    document.querySelector('.start').style.display = 'none';
+    document.querySelector('.preview').style.display = 'block';
+    document.querySelector('.catalog').style.display = 'block';
+    tableNum = document.querySelector('[name=table]').value;
+    document.querySelector('.header__table').textContent = 'Столик ' + tableNum;
+  });
   
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
