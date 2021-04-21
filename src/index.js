@@ -105,11 +105,6 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
     <ul class="product__categories" id="product__categories_${menuName}">
     
     </ul>
-    <div class="product__container" id="product__container_${menuName}">
-      <div class="close-product__wrapper">
-        <div class="close-product">×</div>
-      </div>
-    </div>
     `;
   });
 
@@ -124,7 +119,14 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
 
         //создание
         document.getElementById(`product__categories_${menuNames[i]}`).innerHTML += `
-        <li data-name='${product.category}' class="product__category"><div>${product.category}</div></li>
+        <li data-name='${product.category}' class="product__category">
+          <div class="product__category-name">${product.category}</div>
+          <div class="product__container">
+            <div class="close-product__wrapper">
+              <div class="close-product">×</div>
+            </div>
+          </div>
+        </li>
         `;
       }
 
@@ -142,9 +144,9 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
   //Вывод продуктов в HTML
   menusArr.forEach(function(menu, i){
     menu.forEach(function(product){
-      document.getElementById(`product__container_${menuNames[i]}`).innerHTML += `
+      document.querySelector(`[data-name='${product.category}']`).lastElementChild.innerHTML += `
       <div data-category='${product.category}' class="product">
-        <div class="product__title">${product.title}</div>
+        <div class="product__title">${product.title}</div class="product__category-name">
         <div class="product__right">
           <div class="product__records">
             ${product.capacity !== undefined ? `<div class="product__capacity">${product.capacity + 'g/'}</div>` : ''}
@@ -159,9 +161,7 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
         
         </div>
       </div>
-    `;   
-    
-    
+      `;
     });
   });
 
@@ -170,12 +170,12 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
   const categoriesArr = document.getElementsByClassName('product__category');
 
   for(i = 0; i < categoriesArr.length; i++){
-    const productContainer = categoriesArr[i].closest('.catalog__menu').getElementsByClassName('product__container')[0];
+    const productContainer = categoriesArr[i].getElementsByClassName('product__container')[0];
     const dataCategory = categoriesArr[i].getAttribute('data-name');
     
     categoriesArr[i].addEventListener('click', function(){
       productContainer.style.display = "flex";
-      
+            
       productContainer.querySelectorAll(`[data-category="${dataCategory}"]`).forEach(function(element){
         element.style.display = 'flex';
       });
@@ -190,7 +190,8 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
   for(let i = 0; i < modal.length; i++){
     const closeBtn = modal[i].getElementsByClassName('close-product__wrapper')[0];
 
-    closeBtn.addEventListener('click', function(){
+    closeBtn.addEventListener('click', function(event){
+      event.stopPropagation();
       const products = modal[i].getElementsByClassName('product');
 
       for(let j = 0; j < products.length; j++){
@@ -300,11 +301,10 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
       content.forEach(function(order){
         console.log(order.id);
         if(document.getElementById(order.id)){
+          //не добавляем заказ, если он уже добавлен
           console.log(document.getElementById(order.id).getAttribute('id'));
-          console.log('Order exist');
 
         }else{
-          console.log('new order');
           //обертка каждого заказа + номер столика
           document.getElementById('orderContainer').innerHTML += `
           <div id='${order.id}' class="order__wrapper">
@@ -321,9 +321,7 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
               </div>
             `
           }
-        }
-
-        
+        }        
       })
 
       //удалить заказ
@@ -331,9 +329,9 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
       for(let i = 0; i < deleteOrder.length; i++){
         deleteOrder[i].addEventListener('click', function(){
           let id = deleteOrder[i].parentElement.getAttribute('id');
-          console.log(id);
-          deleteOrder[i].parentElement.remove();
           deleteOrderFromDB(id);
+          
+          deleteOrder[i].parentElement.remove();
         });
       }
       function deleteOrderFromDB(id){
@@ -389,7 +387,6 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //Корзина с заказами
-
   //опустить
   document.getElementsByClassName('header__check-orderBtn')[0].addEventListener('click', function(){
     document.getElementById('preview').style.transform = 'translateX(0%)';  
