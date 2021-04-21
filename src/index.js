@@ -23,13 +23,13 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
   });
 
   let tableNum = '';
-  document.querySelector('#startForm').addEventListener('submit', function(e){
+  document.getElementById('startForm').addEventListener('submit', function(e){
     e.preventDefault();
-    document.querySelector('.start').style.display = 'none';
-    document.querySelector('.preview').style.display = 'block';
-    document.querySelector('.catalog').style.display = 'block';
+    document.getElementsByClassName('start')[0].style.display = 'none';
+    document.getElementsByClassName('preview')[0].style.display = 'block';
+    document.getElementsByClassName('catalog')[0].style.display = 'block';
     tableNum = document.querySelector('[name=table]').value;
-    document.querySelector('.header__table').textContent = 'Столик ' + tableNum;
+    document.getElementsByClassName('header__table')[0].textContent = 'Столик ' + tableNum;
   });
   
 
@@ -170,7 +170,7 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
   const categoriesArr = document.getElementsByClassName('product__category');
 
   for(i = 0; i < categoriesArr.length; i++){
-    const productContainer = categoriesArr[i].closest('.catalog__menu').querySelector('.product__container');
+    const productContainer = categoriesArr[i].closest('.catalog__menu').getElementsByClassName('product__container')[0];
     const dataCategory = categoriesArr[i].getAttribute('data-name');
     
     categoriesArr[i].addEventListener('click', function(){
@@ -188,10 +188,10 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
   const modal = document.getElementsByClassName('product__container');
 
   for(let i = 0; i < modal.length; i++){
-    const closeBtn = modal[i].querySelector('.close-product__wrapper');
+    const closeBtn = modal[i].getElementsByClassName('close-product__wrapper')[0];
 
     closeBtn.addEventListener('click', function(){
-      const products = modal[i].querySelectorAll('.product');
+      const products = modal[i].getElementsByClassName('product');
 
       for(let j = 0; j < products.length; j++){
         products[j].style.display = 'none';
@@ -205,7 +205,7 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //Модальное окно авторизации  
   // When the user clicks on the button, open the modal
-  const loginModal = document.querySelector('#loginModal');
+  const loginModal = document.getElementById('loginModal');
   document.getElementsByClassName('header__loginBtn')[0].addEventListener('click', function(){
     loginModal.style.display = "block";
   });
@@ -362,12 +362,13 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////
   //Функционал кнопок заказа
-  const plus = document.querySelectorAll('.product__plus');
-  const minus = document.querySelectorAll('.product__minus');
+  const plus = document.getElementsByClassName('product__plus');
+  const minus = document.getElementsByClassName('product__minus');
 
   //Уменьшить кол-во позиций
   for(let i = 0; i < minus.length; i++){
     minus[i].addEventListener('click', function(){
+      console.log(minus[i].nextElementSibling.textContent);
       let amount = parseInt(minus[i].nextElementSibling.textContent);
 
       if(amount > 0){
@@ -390,12 +391,12 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
   //Корзина с заказами
 
   //опустить
-  document.querySelector('.header__check-orderBtn').addEventListener('click', function(){
+  document.getElementsByClassName('header__check-orderBtn')[0].addEventListener('click', function(){
     document.getElementById('preview').style.transform = 'translateX(0%)';  
   });
   
   //вернуть обратно наверх
-  document.querySelector('.preview__close').addEventListener('click', function(){
+  document.getElementsByClassName('preview__close')[0].addEventListener('click', function(){
     document.getElementById('preview').style.transform = 'translateY(-120%)';
   });
 
@@ -469,7 +470,7 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
   //Проверка заказанных товаров на наличие в таблице (на случай изменений в коде элемента)
   const submitBtn = document.getElementById('submitBtn').addEventListener('click', function(){
     //Отключаем кнопку для предотвращения спама
-    document.querySelector('#submitBtn').setAttribute("disabled", "disabled");
+    document.getElementById('submitBtn').setAttribute("disabled", "disabled");
 
     const productsPush = []; //финальный массив, который будет отправлен на сервер
     productsPush.push(tableNum);
