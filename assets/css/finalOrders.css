@@ -1,7 +1,14 @@
 .order{
     padding: 20px 10px;
 }
+.order .order__delete{
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    font-weight: 900;
+}
 .order .order__wrapper{
+    position: relative;
     margin: 40px auto;
     padding: 10px;
     width: 80%;
