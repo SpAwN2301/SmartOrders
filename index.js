@@ -1,3 +1,13 @@
+let tableNum = '';
+document.getElementById('startForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  document.getElementsByClassName('start')[0].style.display = 'none';
+  document.getElementsByClassName('header')[0].style.display = 'block';
+  document.getElementsByClassName('catalog')[0].style.display = 'block';
+  tableNum = document.querySelector('[name=table]').value;
+  document.getElementsByClassName('header__table')[0].textContent = 'Столик ' + tableNum;
+});
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Парсинг меню из эксель
 fetch(`./assets/menu/menus.xlsx`).then(function (res) {
@@ -21,33 +31,18 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
     menusArr.push(_products);
   });
 
-  let tableNum = '';
-  document.getElementById('startForm').addEventListener('submit', function(e){
-    e.preventDefault();
-    document.getElementsByClassName('start')[0].style.display = 'none';
-    document.getElementsByClassName('preview')[0].style.display = 'block';
-    document.getElementsByClassName('catalog')[0].style.display = 'block';
-    tableNum = document.querySelector('[name=table]').value;
-    document.getElementsByClassName('header__table')[0].textContent = 'Столик ' + tableNum;
-  });
-  
-
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //Создание табов для выбора Меню
   menuNames.forEach(function(menu, i){
-  if(i === 0){
-    document.getElementById('tabs').innerHTML += `
-    <li class="catalog__tab active" id="catalog__tab_${menu}">
-      <div class="tabcontent" data-toggle="tab">${menu}</div>
-    </li>
-    `;
-  }else{
-    document.getElementById('tabs').innerHTML += `
-    <li class="catalog__tab " id="catalog__tab_${menu}">
-      <div class="tabcontent" data-toggle="tab">${menu}</div>
-    </li>
-    `;
-  }
+    if(i === 0){
+      document.getElementById('catalogTabs').innerHTML += `
+      <li class="catalog__tab active" id="catalog__tab_${menu}">${menu}</li>
+      `;
+    }else{
+      document.getElementById('catalogTabs').innerHTML += `
+      <li class="catalog__tab " id="catalog__tab_${menu}">${menu}</li>
+      `;
+    }
   });
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -55,13 +50,13 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
 
   menuNames.forEach(function(menu, i){
     if(i === 0){
-      document.getElementById('content').innerHTML += `
+      document.getElementById('catalogContent').innerHTML += `
         <div class="catalog__menu" id="catalog__menu_${menu}" style="display: block">
             
         </div>
       `;
     }else{
-      document.getElementById('content').innerHTML += `
+      document.getElementById('catalogContent').innerHTML += `
         <div class="catalog__menu" id="catalog__menu_${menu}" style="display: none">
             
         </div>
@@ -90,12 +85,12 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
       }
 
       // Show the current tab, and add an "active" class to the button that opened the tab
-      document.getElementById(`catalog__menu_${tabs[i].firstElementChild.textContent}`).style.display = "block";
+      document.getElementById(`catalog__menu_${tabs[i].textContent}`).style.display = "block";
       tabs[i].className += " active";
 
     })
   }
-  
+
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //Coздание разметки продуктов и категорий
   menuNames.forEach(function(menuName, i){
@@ -118,23 +113,14 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
 
         //создание
         document.getElementById(`product__categories_${menuNames[i]}`).innerHTML += `
-        <li data-name='${product.category}' class="product__category">
-          <div class="product__category-name">${product.category}</div>
+        <li data-name='${product.category}' class="product__category">${product.category}
           <div class="product__container">
-            <div class="close-product__wrapper">
-              <div class="close-product">×</div>
-            </div>
+      
           </div>
         </li>
         `;
       }
-
-      //Загрузка картинки для бэкграунда
-      const categoryStyle = document.querySelector(`[data-name = '${product.category}']`);
-
-      categoryStyle.style.backgroundImage = `url('./assets/img/${product.category}.jpg')`;
     })
-
   });
 
   ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -142,64 +128,28 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
   menusArr.forEach(function(menu, i){
     menu.forEach(function(product){
       document.querySelector(`[data-name='${product.category}']`).lastElementChild.innerHTML += `
+      <div class="product__wrapper">
       <div data-category='${product.category}' class="product">
         <div class="product__title">${product.title}</div class="product__category-name">
-        <div class="product__right">
           <div class="product__records">
             ${product.capacity !== undefined ? `<div class="product__capacity">${product.capacity + 'g/'}</div>` : ''}
             <div class="product__price">${product.price + 'р'}</div>
           </div>
 
-          <div class="product__buttons">
-            <button class="product__minus">-</button>
-            <div class="product__amount">0</div>
-            <button class="product__plus">+</button>
+          <div class="product__bottom">
+            <div class="product__buttons">
+              <button class="product__minus">-</button>
+              <div class="product__amount">0</div>
+              <button class="product__plus">+</button>
+            </div>
           </div>
-        
-        </div>
+      </div>
       </div>
       `;
     });
   });
 
-  //////////////////////////////////////////////////////////////////////////////////////////////////
-  //Открыть модальное окно категории
-  const categoriesArr = document.getElementsByClassName('product__category');
 
-  for(i = 0; i < categoriesArr.length; i++){
-    const productContainer = categoriesArr[i].getElementsByClassName('product__container')[0];
-    const dataCategory = categoriesArr[i].getAttribute('data-name');
-    
-    categoriesArr[i].addEventListener('click', function(){
-      productContainer.style.display = "flex";
-            
-      productContainer.querySelectorAll(`[data-category="${dataCategory}"]`).forEach(function(element){
-        element.style.display = 'flex';
-      });
-    });
-  }
-
-  //////////////////////////////////////////////////////////////////////////////////////////////////
-  //Закрыть модальное окно категории 
-  
-  const modal = document.getElementsByClassName('product__container');
-
-  for(let i = 0; i < modal.length; i++){
-    const closeBtn = modal[i].getElementsByClassName('close-product__wrapper')[0];
-
-    closeBtn.addEventListener('click', function(event){
-      event.stopPropagation();
-      const products = modal[i].getElementsByClassName('product');
-
-      for(let j = 0; j < products.length; j++){
-        products[j].style.display = 'none';
-      }
-
-      modal[i].style.display = 'none';
-      createCart();
-    });
-  }
-  
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //Модальное окно авторизации  
   // When the user clicks on the button, open the modal
@@ -221,12 +171,15 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
     const email = e.target.querySelector('.loginModal__mail').value;
     const password = e.target.querySelector('.loginModal__password').value;
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//авотризация
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //авотризация
     authWithEmailAndPassword(email, password)
       .then(token => {
         if(!token){
           console.log('Uncorrect login');
+          document.getElementsByClassName('loginModal__text')[0].innerHTML = `
+            <p class="error">Неверный логин или пароль</p>
+          `
           e.target.querySelector('.loginModal__submit').disabled = false;
         }else{
           console.log('Correct');
@@ -251,6 +204,7 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
       })
       
   });
+
   loginModal.getElementsByClassName('loginModal__submit')[0].addEventListener('click', function(){
     console.log('submit');
   });
@@ -269,6 +223,7 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
     })
     .then(renderModalAfterAuth)
   }
+
   /////////////////////////////////////////////////////
   //авторизация через почту и пароль
   function authWithEmailAndPassword(email, password){
@@ -286,6 +241,7 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
     .then(response => response.json())
     .then(data => data.idToken)
   }
+
   //////////////////////////////////////////////////////////////////////
   //Рендер модального окна после авторизации
   function renderModalAfterAuth(content){
@@ -363,12 +319,13 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
   //Уменьшить кол-во позиций
   for(let i = 0; i < minus.length; i++){
     minus[i].addEventListener('click', function(){
-      console.log(minus[i].nextElementSibling.textContent);
+
       let amount = parseInt(minus[i].nextElementSibling.textContent);
 
       if(amount > 0){
         amount--;
         minus[i].nextElementSibling.textContent = amount;
+        createCart();
       }
     })
   }
@@ -379,6 +336,7 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
       let amount = parseInt(plus[i].previousElementSibling.textContent);
       amount++;
       plus[i].previousElementSibling.textContent = amount;
+      createCart();
     })
   }
 
@@ -536,5 +494,6 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
     })
 
   });
-  
+
+
 });

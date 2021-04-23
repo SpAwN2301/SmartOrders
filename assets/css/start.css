@@ -1,0 +1,51 @@
+.start{
+    padding: 30vh 20px;
+
+    width: 100%;
+    height: 100vh;
+
+    background-color: white;
+}
+
+.start .start__title{
+    margin-bottom: 50px;
+    color: black;
+    text-align: center;
+    font-size: 50px;
+    font-weight: 100;
+}
+.start .start__form{
+    display: flex;
+    flex-direction: column;
+    font-weight: 100;
+}
+.start .start__form [name = "table"]{
+    margin-bottom: 50px;
+
+    text-align: center;
+    font-size: 50px;
+    font-weight: 100;
+    
+    border: 0;
+    border-bottom: 1px solid #000;
+    background-color: rgba(0,0,0,0);
+    outline: 0;  
+}
+.start .start__submitBtn{
+    outline: none;
+    border: none;
+    background-color: #212121;
+ 
+    display: block;
+    margin: 0 auto;
+    
+    width: 30vh;
+    height: 40px;
+
+    text-align: center;
+    color: white;
+    font-weight: 100;
+    font-size: 30px;
+
+    -webkit-appearance: none;
+}

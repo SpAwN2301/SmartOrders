@@ -1,0 +1,110 @@
+.preview{
+    top: 0;
+    position: fixed;
+    z-index: 1;
+    width: 100%;
+    min-height: 45vh;
+    background-color:rgba(0,0,0, 0.99);
+    -webkit-transform: translateY(-150%);
+        -ms-transform: translateY(-150%);
+            transform: translateY(-150%);
+    -webkit-transition: all .5s;
+    -o-transition: all .5s;
+    transition: all .5s;
+}
+.preview__order{
+    height: 40vh;
+    overflow: auto;
+}
+.preview .preview__title{
+    margin-top: 20px;
+
+    font-weight: 300;
+    font-size: 40px;
+    text-align: center;
+
+    color: white;
+}
+.preview .preview__products{
+    padding: 5px;
+}
+.preview .preview__empty-text{
+    margin: 50px 20px 20px 20px;
+    font-weight: 100;
+    font-size: 20px;
+    text-align: center;
+    color: white;
+}
+.preview .preview__product{
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
+
+    color: white;
+}
+
+.preview .preview__product-title{
+    width: 50%;
+}
+.preview .preview__product-wrapper{
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+}
+.preview .preview__final{
+    display: none;
+    position: absolute;
+    bottom: -60px;
+    width: 100%;
+
+    background-color: rgba(0,0,0, 0.99);
+    color: white;
+}
+.preview .preview__final-wrapper{
+    padding: 0 5px;
+
+    display: flex;
+    -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+            justify-content: space-between;
+}
+.preview .preview__final-btn{
+    outline: none;    
+    border: whitesmoke 2px solid;
+
+    display: block;
+
+    width: 100%;
+    height: 40px;
+
+    font-size: 20px;
+    font-weight: 300;
+
+    -webkit-appearance: none;
+}
+.preview .preview__close{
+    position: relative;
+
+    padding: 3px;
+
+    background-color: whitesmoke;
+    outline: none;
+    width: 30px;
+    height: 30px;
+    border: 0;
+    border-radius: 100%;
+}
+.preview .preview__close-wrapper{
+    position: absolute;
+    right: 5px;
+    bottom: -115px;
+    background: none;
+    outline: none;
+    border: none;
+}
+.preview .preview__close img{
+    width: 70%;
+}
