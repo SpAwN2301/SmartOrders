@@ -66,6 +66,8 @@
     color: white;
     font-weight: 100;
     font-size: 30px;
+
+    -webkit-appearance: none;
 }
 .header{
     padding: 5px;
@@ -177,9 +179,9 @@
     width: 100%;
     min-height: 45vh;
     background-color:rgba(0,0,0, 0.99);
-    -webkit-transform: translateY(-120%);
-        -ms-transform: translateY(-120%);
-            transform: translateY(-120%);
+    -webkit-transform: translateY(-150%);
+        -ms-transform: translateY(-150%);
+            transform: translateY(-150%);
     -webkit-transition: all .5s;
     -o-transition: all .5s;
     transition: all .5s;
@@ -227,16 +229,18 @@
     display: flex;
 }
 .preview .preview__final{
+    display: none;
     position: absolute;
-    bottom: 0;
+    bottom: -60px;
     width: 100%;
 
+    background-color: rgba(0,0,0, 0.99);
     color: white;
 }
 .preview .preview__final-wrapper{
     padding: 0 5px;
 
-    display: none;
+    display: flex;
     -webkit-box-pack: justify;
         -ms-flex-pack: justify;
             justify-content: space-between;
@@ -245,13 +249,15 @@
     outline: none;    
     border: whitesmoke 2px solid;
 
-    display: none;
+    display: block;
 
     width: 100%;
     height: 40px;
 
     font-size: 20px;
     font-weight: 300;
+
+    -webkit-appearance: none;
 }
 .preview .preview__close{
     position: relative;
@@ -268,7 +274,7 @@
 .preview .preview__close-wrapper{
     position: absolute;
     right: 5px;
-    bottom: -35px;
+    bottom: -115px;
     background: none;
     outline: none;
     border: none;
@@ -581,6 +587,8 @@
     color: white;
     font-weight: 100;
     font-size: 20px;
+
+    -webkit-appearance: none;
 }
 .loginModal .loginModal__group{
     position: relative;

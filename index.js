@@ -1,4 +1,3 @@
-
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Парсинг меню из эксель
 fetch(`./assets/menu/menus.xlsx`).then(function (res) {
@@ -133,9 +132,7 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
       //Загрузка картинки для бэкграунда
       const categoryStyle = document.querySelector(`[data-name = '${product.category}']`);
 
-      categoryStyle.style.cssText = `
-        background-image: url('./assets/img/${product.category}.jpg');
-      `;
+      categoryStyle.style.backgroundImage = `url('./assets/img/${product.category}.jpg')`;
     })
 
   });
@@ -394,7 +391,7 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
   
   //вернуть обратно наверх
   document.getElementsByClassName('preview__close')[0].addEventListener('click', function(){
-    document.getElementById('preview').style.transform = 'translateY(-120%)';
+    document.getElementById('preview').style.transform = 'translateY(-150%)';
   });
 
 
@@ -406,8 +403,7 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
 
   function createCart(){
     //Создание итоговой суммы кнопки принятия заказа
-    document.getElementsByClassName('preview__final-wrapper')[0].style.display = 'flex';
-    document.getElementById('submitBtn').style.display = 'block';
+    document.getElementById('orderFinal').style.display = 'block';
 
     //Очистка старого заказа
     document.getElementsByClassName('header__product-amount')[0].textContent = '';
