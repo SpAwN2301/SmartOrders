@@ -4,11 +4,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="format-detection" content="telephone=no">
-    <title>SmartOrder</title>
+    <title>SmartOrders</title>
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/fonts.css">
-
 </head>
 <body>
     <section class="start">
@@ -20,7 +18,8 @@
           </form>
         </div>
     </section>
-    
+
+    <!-- new screen-------------------------------------------------------------------------------------------------------- -->
     <header class="header">
         <div class="container">
             <div class="header__wrapper">
@@ -54,7 +53,7 @@
             </div>
         </div>
     </header>
-    
+
     <section class="preview" id="preview">
         <div class="container">
             <div class="preview__order">
@@ -81,15 +80,18 @@
         </div>
     </section>
 
-  <section class="catalog">
-    <div class="container">
-      <h1 class="catalog__title">Praktika by DARVIN</h1>
-      <ul class="catalog__tabs" id="tabs"></ul>
-      
-      <div class="catalog__content" id="content"></div>
-    </div>
-  </section>
-  
+    <section class="catalog">
+        <div class="container">
+            <h1 class="catalog__title">Praktika by DARVIN</h1>
+            <ul class="catalog__tabs" id="catalogTabs">
+                <!-- создать в JS -->
+            </ul>
+        </div>
+
+        <div class="catalog__content" id="catalogContent"></div>
+        </div>
+      </section>
+
     <script type="text/javascript" lang="javascript" src="xlsx.full.min.js"></script>
     <script src="index.js"></script>
 </body>

@@ -1,0 +1,16 @@
+.timer{
+    background-color:white;
+    width: 100%;
+    height: 100vh;
+    padding: 50px 30px;
+}
+.timer__title{
+    margin: 0 auto;
+    font-size: 50px;
+    color: black;
+}
+.timer__time{
+    margin: 0 auto;
+    font-size: 50px;
+    color: black;
+}
