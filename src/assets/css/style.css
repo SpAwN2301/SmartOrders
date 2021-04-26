@@ -245,10 +245,6 @@
     -o-transition: all .5s;
     transition: all .5s;
 }
-.preview__order{
-    height: 40vh;
-    overflow: auto;
-}
 .preview .preview__title{
     margin-top: 20px;
 
@@ -259,6 +255,10 @@
     color: black;
 }
 .preview .preview__products{
+    
+    height: 80vh;
+    overflow: auto;
+
     padding: 5px;
 }
 .preview .preview__empty-text{
@@ -283,14 +283,12 @@
     width: 50%;
 }
 .preview .preview__product-wrapper{
-    display: -webkit-box;
-    display: -ms-flexbox;
     display: flex;
 }
 .preview .preview__final{
     display: none;
     position: absolute;
-    bottom: -58px;
+    bottom: 0;
     width: 100%;
 
     background-color: white;
