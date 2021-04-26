@@ -138,7 +138,7 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
 
           <div class="product__bottom">
             <div class="product__buttons">
-              <button class="product__minus">-</button>
+              <button class="product__minus">−</button>
               <div class="product__amount">0</div>
               <button class="product__plus">+</button>
             </div>
