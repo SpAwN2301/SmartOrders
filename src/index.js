@@ -130,12 +130,12 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
       document.querySelector(`[data-name='${product.category}']`).lastElementChild.innerHTML += `
       <div class="product__wrapper">
       <div data-category='${product.category}' class="product">
-        <div class="product__title">${product.title}</div class="product__category-name">
-          <div class="product__records">
-            ${product.capacity !== undefined ? `<div class="product__capacity">${product.capacity + 'g/'}</div>` : ''}
-            <div class="product__price">${product.price + 'р'}</div>
-          </div>
-
+        <div class="product__img">
+          <img src="./assets/img/${product.article}.png" alt="">
+        </div>
+        <div class="product__title">${product.title}</div class="product__category-name">  
+        <button class="product__price">${product.price + 'р'}</button>
+          
           <div class="product__bottom">
             <div class="product__buttons">
               <button class="product__minus">−</button>
@@ -313,8 +313,19 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////
   //Функционал кнопок заказа
+  const priceBtn = document.getElementsByClassName('product__price');
   const plus = document.getElementsByClassName('product__plus');
   const minus = document.getElementsByClassName('product__minus');
+
+  //Выбрать позицию
+  for(let i = 0; i < priceBtn.length; i++){
+    priceBtn[i].addEventListener('click', function(){
+      priceBtn[i].style.display = 'none';
+      priceBtn[i].nextElementSibling.style.display = 'block';
+      priceBtn[i].nextElementSibling.getElementsByClassName('product__amount')[0].textContent = 1;
+      createCart();
+    });
+  }
 
   //Уменьшить кол-во позиций
   for(let i = 0; i < minus.length; i++){
