@@ -443,15 +443,15 @@
 }
 .product .product__records{
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
     margin-top: 10px;
     font-size: 20px;
 }
 .product .product__bottom{
     position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
     bottom: 0;
-
-    width: 100%;
 }
 .product .product__buttons {
     display: flex;
