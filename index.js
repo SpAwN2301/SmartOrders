@@ -252,7 +252,6 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
       
       
       content.forEach(function(order){
-        console.log(order.id);
         if(document.getElementById(order.id)){
           //не добавляем заказ, если он уже добавлен
           console.log(document.getElementById(order.id).getAttribute('id'));
@@ -274,40 +273,41 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
               </div>
             `
           }
-        }        
+        }     
       })
+    }
 
-      //удалить заказ
-      const deleteOrder = document.getElementsByClassName('order__delete');
-      for(let i = 0; i < deleteOrder.length; i++){
-        deleteOrder[i].addEventListener('click', function(){
-          let id = deleteOrder[i].parentElement.getAttribute('id');
-          deleteOrderFromDB(id);
-          
-          deleteOrder[i].parentElement.remove();
-        });
-      }
-      function deleteOrderFromDB(id){
-        return fetch(`https://smartorders-200c8-default-rtdb.firebaseio.com/Praktika/gruzinka/orders/${id}.json`, {
-          method: 'DELETE'
-        })
-      }
+    //удалить заказ
+    const deleteOrder = document.getElementsByClassName('order__delete');
+    for(let i = 0; i < deleteOrder.length; i++){
+      deleteOrder[i].addEventListener('click', function(){
+        let id = deleteOrder[i].parentElement.getAttribute('id');
+        console.log(`id is ${id}`)
+        deleteOrderFromDB(id);
+        
+        deleteOrder[i].parentElement.style.display = 'none';
+      });
+    }
+    function deleteOrderFromDB(id){
+      return fetch(`https://smartorders-200c8-default-rtdb.firebaseio.com/Praktika/gruzinka/orders/${id}.json`, {
+        method: 'DELETE'
+      })
+    }
 
-      //зачеркнуть нажатое название
-      const titleOnClick = document.getElementsByClassName('order__title');
-      for(let i = 0; i < titleOnClick.length; i++){
-        let titleIsClick = false;
-        titleOnClick[i].addEventListener('click', function(){
-          if(!titleIsClick){
-            titleOnClick[i].style.textDecoration = 'line-through';
-            titleIsClick = true;
-          }else{
-            titleOnClick[i].style.textDecoration = 'none';
-            titleIsClick = false;
-          }
-          
-        });
-      }
+    //зачеркнуть нажатое название
+    const titleOnClick = document.getElementsByClassName('order__title');
+    for(let i = 0; i < titleOnClick.length; i++){
+      let titleIsClick = false;
+      titleOnClick[i].addEventListener('click', function(){
+        if(!titleIsClick){
+          titleOnClick[i].style.textDecoration = 'line-through';
+          titleIsClick = true;
+        }else{
+          titleOnClick[i].style.textDecoration = 'none';
+          titleIsClick = false;
+        }
+        
+      });
     }
   }
 
