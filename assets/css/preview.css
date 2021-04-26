@@ -57,7 +57,7 @@
 .preview .preview__final{
     display: none;
     position: absolute;
-    bottom: -60px;
+    bottom: -58px;
     width: 100%;
 
     background-color: rgba(0,0,0, 0.99);
