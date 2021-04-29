@@ -10,30 +10,31 @@ document.getElementById('startForm').addEventListener('submit', function(e){
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //Парсинг меню из эксель
-fetch(`./assets/menu/menus.xlsx`).then(function (res) {
-  if (!res.ok) throw new Error("fetch failed");
-  return res.arrayBuffer();
-})
-.then(function (ab) {
-  const data = new Uint8Array(ab);
-  const workbook = XLSX.read(data, {
-      type: "array"
-  });
+const id = '1-z4OlGXqByTAl-IzLweBWruDB0XE4ZLg658BXi7DaPg'
+const menusURL = `https://spreadsheets.google.com/feeds/worksheets/${id}/public/basic?alt=json` //ссылка на таблицу
 
-  const menuNames = [];
-  const menusArr = [];
+const getMenus = async (url) => {
+  const obj = await fetch(url)
+  const result = await obj.json()
+  const responseArr = result.feed.entry
 
-  workbook.SheetNames.forEach(function(name){
-    menuNames.push(name);
+  let resultObj = {}
 
-    const worksheet = workbook.Sheets[name];
-    const _products = XLSX.utils.sheet_to_json(worksheet, { raw: true });
-    menusArr.push(_products);
-  });
+  //Цикл по каждому меню
+  await Promise.all(
+    responseArr.map(async function (menu) {
+      let parsedMenuUrl = menu.link[0].href;//ссылка на меню для дальнейшего запроса
+      parsedMenuUrl += '?alt=json';
 
+      const item = await getProductList(parsedMenuUrl);
+      resultObj[item.title] = item.items;
+    })
+  )
+
+  console.log(resultObj);
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //Создание табов для выбора Меню
-  menuNames.forEach(function(menu, i){
+  Object.keys(resultObj).forEach(function(menu, i){
     if(i === 0){
       document.getElementById('catalogTabs').innerHTML += `
       <li class="catalog__tab active" id="catalog__tab_${menu}">${menu}</li>
@@ -47,8 +48,7 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //Создание содержимого меню
-
-  menuNames.forEach(function(menu, i){
+  Object.keys(resultObj).forEach(function(menu, i){
     if(i === 0){
       document.getElementById('catalogContent').innerHTML += `
         <div class="catalog__menu" id="catalog__menu_${menu}" style="display: block">
@@ -93,7 +93,7 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
 
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //Coздание разметки продуктов и категорий
-  menuNames.forEach(function(menuName, i){
+  Object.keys(resultObj).forEach(function(menuName){
     
     document.getElementById(`catalog__menu_${menuName}`).innerHTML += `
     <ul class="product__categories" id="product__categories_${menuName}">
@@ -104,7 +104,7 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //Создание категорий  
-  menusArr.forEach(function(menu, i){
+  Object.values(resultObj).forEach(function(menu, i){
     const categoriesArr = [];
     //поиск уникальных категорий
     menu.forEach(function(product){
@@ -112,7 +112,7 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
         categoriesArr.push(product.category);
 
         //создание
-        document.getElementById(`product__categories_${menuNames[i]}`).innerHTML += `
+        document.getElementById(`product__categories_${Object.keys(resultObj)[i]}`).innerHTML += `
         <li data-name='${product.category}' class="product__category">${product.category}
           <div class="product__container">
       
@@ -125,7 +125,7 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
 
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   //Вывод продуктов в HTML
-  menusArr.forEach(function(menu, i){
+  Object.values(resultObj).forEach(function(menu, i){
     menu.forEach(function(product){
       document.querySelector(`[data-name='${product.category}']`).lastElementChild.innerHTML += `
       <div class="product__wrapper">
@@ -148,7 +148,6 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
       `;
     });
   });
-
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //Модальное окно авторизации  
@@ -441,7 +440,7 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
       let titleIs = false;
       let priceIs = false;
 
-      menusArr.forEach(function(menu){
+      Object.values(resultObj).forEach(function(menu){
         menu.forEach(function(product){
           if(orderedProduct.title === product.title){
 
@@ -507,4 +506,32 @@ fetch(`./assets/menu/menus.xlsx`).then(function (res) {
   });
 
 
-});
+
+
+
+
+
+}
+
+const getProductList = async (url) => {
+  const obj = await fetch(url);
+  const result = await obj.json();
+  const products = result.feed.entry;
+
+  const menuProducts = []; //массив продуктов определенного меню
+  products.forEach(function (product) {
+    //Приводим строку для корректного парса
+    let str = product.content.$t.replaceAll(/"/g, "'");
+    str = '{"' + str.replaceAll(/,\s\w{0,}:/g, '"$&') + '"}';
+    str = str.replaceAll('", ', '","');
+    str = str.replaceAll(': ', '":"');
+
+    menuProducts.push(JSON.parse(str)); //парсим строку в объект и передаем в массив объектов
+  })
+  return {
+    title: result.feed.title.$t,
+    items: menuProducts,
+  }
+}
+
+getMenus(menusURL);
