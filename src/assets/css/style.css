@@ -458,6 +458,7 @@ html {
     font-size: 20px;
 }
 .product .product__price{
+    outline: none;
     border: none;
     width: 100%;
     height: 30px;
@@ -470,6 +471,9 @@ html {
 
     border-radius: 5px;
     background-color: whitesmoke;
+}
+.product .product__price:focus{
+    background-color: green;
 }
 .product .product__bottom{
     display: none;
@@ -553,4 +557,17 @@ html {
 }
 .order .order__title{
     width: 60%;
+}
+
+.error{
+    position: relative;
+    height: 100vh;
+}
+.error .error__title{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+
+    font-size: 40px;
+    text-align: center;
 }

@@ -1,3 +1,20 @@
+let apiKey = '1be9a6884abd4c3ea143b59ca317c6b2';
+$.getJSON('https://ipgeolocation.abstractapi.com/v1/?api_key=' + apiKey, function(data) {
+  console.log(JSON.stringify(data, null, 2))
+  const ipAdd = JSON.stringify(data.ip_address, null, 2);
+  if (ipAdd !== '"31.173.83.184"'){
+    try {
+      throw new Error('Уупс!');
+    } catch (e) {
+      document.body.innerHTML = `
+        <div class="error">
+          <div class="error__title">Подключитесь в Wi-Fi сети ресторана</div>
+        </div>
+      `;
+    }
+  }
+});
+
 let tableNum = '';
 document.getElementById('startForm').addEventListener('submit', function(e){
   e.preventDefault();
@@ -31,7 +48,6 @@ const getMenus = async (url) => {
     })
   )
 
-  console.log(resultObj);
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //Создание табов для выбора Меню
   Object.keys(resultObj).forEach(function(menu, i){
