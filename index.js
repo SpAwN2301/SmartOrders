@@ -2,7 +2,7 @@ let apiKey = '1be9a6884abd4c3ea143b59ca317c6b2';
 $.getJSON('https://ipgeolocation.abstractapi.com/v1/?api_key=' + apiKey, function(data) {
   console.log(JSON.stringify(data, null, 2))
   const ipAdd = JSON.stringify(data.ip_address, null, 2);
-  if (ipAdd !== '"31.173.83.184"'){
+  if (ipAdd !== '"178.176.78.175"'){
     try {
       throw new Error('Уупс!');
     } catch (e) {
@@ -438,6 +438,7 @@ const getMenus = async (url) => {
       let productPrice = parseInt(orderedProduct.price.slice(0, -1));
       finalPrice += productPrice * orderedProduct.amount;
     });
+    document.querySelector('[name=amount]').setAttribute('value', finalPrice)
 
     document.getElementById('finalPrice').textContent = finalPrice + 'р'; 
     
