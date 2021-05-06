@@ -122,21 +122,42 @@ const getMenus = async (url) => {
   });
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  //Создание категорий  
+  //Создание категорий  и подкатегорий
   Object.values(resultObj).forEach(function(menu, i){
-    const categoriesArr = [];
-    //поиск уникальных категорий
+    const catAndSubcatObj = {};
     menu.forEach(function(product){
-      if(categoriesArr.indexOf(product.category) == -1){
-        categoriesArr.push(product.category);
+      //поиск уникальных категорий
+      if(Object.keys(catAndSubcatObj).indexOf(product.category) == -1){
+        //добавление категории
+        catAndSubcatObj[`${product.category}`] = [];
 
-        //создание
-        document.getElementById(`product__categories_${Object.keys(resultObj)[i]}`).innerHTML += `
-        <li data-name='${product.category}' class="product__category">${product.category}
+      }
+
+      //поиск уникальных подкатегорий
+      if(product.country !== undefined && catAndSubcatObj[`${product.category}`].indexOf(product.country) == -1){
+        //добавление подкатегории
+        catAndSubcatObj[`${product.category}`].push(product.country);
+      }
+    })
+
+    //создание категорий
+    Object.keys(catAndSubcatObj).forEach(function(category){
+      document.getElementById(`product__categories_${Object.keys(resultObj)[i]}`).innerHTML += `
+        <li data-name='${category}' class="product__category">${category}
           <div class="product__container">
       
           </div>
         </li>
+      `;
+
+      //создание подкатегорий
+      for(let i = 0; i < catAndSubcatObj[`${category}`].length; i++){
+        document.querySelector(`[data-name='${category}']`).innerHTML += `
+        <div data-country="${catAndSubcatObj[category][i]}" class="product__subcategory">${catAndSubcatObj[category][i]}
+          <div class="product__container">
+        
+          </div>
+        </div>
         `;
       }
     })
@@ -146,25 +167,49 @@ const getMenus = async (url) => {
   //Вывод продуктов в HTML
   Object.values(resultObj).forEach(function(menu, i){
     menu.forEach(function(product){
-      document.querySelector(`[data-name='${product.category}']`).lastElementChild.innerHTML += `
-      <div class="product__wrapper">
-      <div data-category='${product.category}' class="product">
-        <div class="product__img">
-          <img src="./assets/img/${product.article}.png" alt="">
-        </div>
-        <div class="product__title">${product.title}</div class="product__category-name">  
-        <button class="product__price">${product.price + 'р'}</button>
-          
-          <div class="product__bottom">
-            <div class="product__buttons">
-              <button class="product__minus">−</button>
-              <div class="product__amount">0</div>
-              <button class="product__plus">+</button>
+      if(product.available == undefined){
+        if(product.country !== undefined){
+          document.querySelector(`[data-name='${product.category}']`).querySelector(`[data-country='${product.country}']`).getElementsByClassName('product__container')[0].innerHTML += `
+          <div class="product__wrapper">
+          <div data-category='${product.category}' class="product">
+            <div class="product__img">
+              <img src="./assets/img/${product.article}.png" alt="">
             </div>
+            <div class="product__title">${product.title}</div class="product__category-name">  
+            <button class="product__price">${product.price + 'р'}</button>
+              
+              <div class="product__bottom">
+                <div class="product__buttons">
+                  <button class="product__minus">−</button>
+                  <div class="product__amount">0</div>
+                  <button class="product__plus">+</button>
+                </div>
+              </div>
           </div>
-      </div>
-      </div>
-      `;
+          </div>
+          `;
+        }else{
+          document.querySelector(`[data-name='${product.category}']`).getElementsByClassName('product__container')[0].innerHTML += `
+          <div class="product__wrapper">
+          <div data-category='${product.category}' class="product">
+            <div class="product__img">
+              <img src="./assets/img/${product.article}.png" alt="">
+            </div>
+            <div class="product__title">${product.title}</div class="product__category-name">  
+            <button class="product__price">${product.price + 'р'}</button>
+              
+              <div class="product__bottom">
+                <div class="product__buttons">
+                  <button class="product__minus">−</button>
+                  <div class="product__amount">0</div>
+                  <button class="product__plus">+</button>
+                </div>
+              </div>
+          </div>
+          </div>
+          `;
+        }
+      }
     });
   });
 

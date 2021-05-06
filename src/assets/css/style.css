@@ -440,9 +440,15 @@ html {
     color: black;
     font-size: 30px; 
 }
+.product__subcategory{
+    font-size: 20px;
+    color:grey;
+}
 .product__container{
     display: flex;
     overflow: auto;
+
+    margin-bottom: 20px;
 }
 .product__wrapper:first-child > .product{
     margin-left: 0;
