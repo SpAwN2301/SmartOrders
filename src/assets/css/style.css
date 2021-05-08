@@ -434,8 +434,7 @@ html {
     animation: fadeInUp 1s;
 }
 .product__category{
-    margin-bottom: 30px; 
-    min-height: 280px;
+    margin-bottom: 30px;
 
     color: black;
     font-size: 30px; 
@@ -552,6 +551,7 @@ html {
     grid-template-columns: 1fr 1fr 1fr;
 }
 .order .order__delete{
+    cursor: pointer;
     position: absolute;
     right: 10px;
     top: 10px;
@@ -579,6 +579,7 @@ html {
     margin: 10px 0;
 }
 .order .order__title{
+    cursor: pointer;
     width: 60%;
 }
 
