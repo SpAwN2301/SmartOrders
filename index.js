@@ -122,21 +122,41 @@ const getMenus = async (url) => {
   });
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  //Создание категорий  
+  //Создание категорий  и подкатегорий
   Object.values(resultObj).forEach(function(menu, i){
-    const categoriesArr = [];
-    //поиск уникальных категорий
+    const catAndSubcatObj = {};
     menu.forEach(function(product){
-      if(categoriesArr.indexOf(product.category) == -1){
-        categoriesArr.push(product.category);
+      //поиск уникальных категорий
+      if(Object.keys(catAndSubcatObj).indexOf(product.category) == -1){
+        //добавление категории
+        catAndSubcatObj[`${product.category}`] = [];
+      }
 
-        //создание
-        document.getElementById(`product__categories_${Object.keys(resultObj)[i]}`).innerHTML += `
-        <li data-name='${product.category}' class="product__category">${product.category}
+      //поиск уникальных подкатегорий
+      if(product.subcategory !== undefined && catAndSubcatObj[`${product.category}`].indexOf(product.subcategory) == -1){
+        //добавление подкатегории
+        catAndSubcatObj[`${product.category}`].push(product.subcategory);
+      }
+    })
+
+    //создание категорий
+    Object.keys(catAndSubcatObj).forEach(function(category){
+      document.getElementById(`product__categories_${Object.keys(resultObj)[i]}`).innerHTML += `
+        <li data-name='${category}' class="product__category">${category}
           <div class="product__container">
       
           </div>
         </li>
+      `;
+
+      //создание подкатегорий
+      for(let i = 0; i < catAndSubcatObj[`${category}`].length; i++){
+        document.querySelector(`[data-name='${category}']`).innerHTML += `
+        <div data-subcategory="${catAndSubcatObj[category][i]}" class="product__subcategory">${catAndSubcatObj[category][i]}
+          <div class="product__container">
+        
+          </div>
+        </div>
         `;
       }
     })
@@ -144,29 +164,76 @@ const getMenus = async (url) => {
 
   ///////////////////////////////////////////////////////////////////////////////////////////////////
   //Вывод продуктов в HTML
-  Object.values(resultObj).forEach(function(menu, i){
+  Object.values(resultObj).forEach(function(menu){
     menu.forEach(function(product){
-      document.querySelector(`[data-name='${product.category}']`).lastElementChild.innerHTML += `
-      <div class="product__wrapper">
-      <div data-category='${product.category}' class="product">
-        <div class="product__img">
-          <img src="./assets/img/${product.article}.png" alt="">
-        </div>
-        <div class="product__title">${product.title}</div class="product__category-name">  
-        <button class="product__price">${product.price + 'р'}</button>
-          
-          <div class="product__bottom">
-            <div class="product__buttons">
-              <button class="product__minus">−</button>
-              <div class="product__amount">0</div>
-              <button class="product__plus">+</button>
+      if(product.available == undefined){
+        if(product.subcategory !== undefined){
+          document.querySelector(`[data-name='${product.category}']`).querySelector(`[data-subcategory='${product.subcategory}']`).getElementsByClassName('product__container')[0].innerHTML += `
+          <div class="product__wrapper">
+          <div data-category='${product.category}' class="product">
+            <div class="product__img">
+              <img src="./assets/img/${product.article}.png" alt="">
             </div>
+            <div class="product__title">${product.title}</div class="product__category-name">  
+            <button class="product__price">${product.price + 'р'}</button>
+              
+              <div class="product__bottom">
+                <div class="product__buttons">
+                  <button class="product__minus">−</button>
+                  <div class="product__amount">0</div>
+                  <button class="product__plus">+</button>
+                </div>
+              </div>
           </div>
-      </div>
-      </div>
-      `;
+          </div>
+          `;
+        }else{
+          document.querySelector(`[data-name='${product.category}']`).getElementsByClassName('product__container')[0].innerHTML += `
+          <div class="product__wrapper">
+          <div data-category='${product.category}' class="product">
+            <div class="product__img">
+              <img src="./assets/img/${product.article}.png" alt="">
+            </div>
+            <div class="product__title">${product.title}</div class="product__category-name">  
+            <button class="product__price">${product.price + 'р'}</button>
+              
+              <div class="product__bottom">
+                <div class="product__buttons">
+                  <button class="product__minus">−</button>
+                  <div class="product__amount">0</div>
+                  <button class="product__plus">+</button>
+                </div>
+              </div>
+          </div>
+          </div>
+          `;
+        }
+      }
     });
   });
+  //удаление пустых контейнеров
+  const getProductContainer = document.getElementsByClassName('product__container');
+  for(let i = getProductContainer.length-1; i > 0; i--){
+    if(getProductContainer[i].children.length === 0){
+      getProductContainer[i].remove();
+    }
+  }  
+
+  //удаление пустых подкатегорий
+  const getSubcategory = document.getElementsByClassName('product__subcategory');
+  for(let i = getSubcategory.length-1; i > 0; i--){
+    if(getSubcategory[i].children.length === 0){
+      getSubcategory[i].remove();
+    }
+  }  
+
+  //удаление пустых категорий
+  const getСategory = document.getElementsByClassName('product__category');
+  for(let i = getСategory.length-1; i > 0; i--){
+    if(getСategory[i].children.length === 0){
+      getСategory[i].remove();
+    }
+  } 
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //Модальное окно авторизации  
@@ -194,13 +261,13 @@ const getMenus = async (url) => {
     authWithEmailAndPassword(email, password)
       .then(token => {
         if(!token){
-          console.log('Uncorrect login');
+          //console.log('Uncorrect login');
           document.getElementsByClassName('loginModal__text')[0].innerHTML = `
             <p class="error">Неверный логин или пароль</p>
           `
           e.target.querySelector('.loginModal__submit').disabled = false;
         }else{
-          console.log('Correct');
+          //console.log('Correct');
           e.target.querySelector('.loginModal__submit').disabled = false;
 
           getOrder(token);
@@ -224,7 +291,7 @@ const getMenus = async (url) => {
   });
 
   loginModal.getElementsByClassName('loginModal__submit')[0].addEventListener('click', function(){
-    console.log('submit');
+    //console.log('submit');
   });
   function getOrder(token){
     return fetch(`https://smartorders-200c8-default-rtdb.firebaseio.com/Praktika/gruzinka/orders.json?auth=${token}`)
@@ -266,13 +333,12 @@ const getMenus = async (url) => {
     if(typeof content === 'string'){
       document.getElementsByClassName('loginModal__text')[0].innerHTML = content;
     }else{
-      console.log(content);
-      
+      //console.log(content);
       
       content.forEach(function(order){
         if(document.getElementById(order.id)){
           //не добавляем заказ, если он уже добавлен
-          console.log(document.getElementById(order.id).getAttribute('id'));
+          //console.log(document.getElementById(order.id).getAttribute('id'));
 
         }else{
           //обертка каждого заказа + номер столика
@@ -300,7 +366,7 @@ const getMenus = async (url) => {
     for(let i = 0; i < deleteOrder.length; i++){
       deleteOrder[i].addEventListener('click', function(){
         let id = deleteOrder[i].parentElement.getAttribute('id');
-        console.log(`id is ${id}`)
+        //console.log(`id is ${id}`)
         deleteOrderFromDB(id);
         
         deleteOrder[i].parentElement.style.display = 'none';
@@ -406,6 +472,7 @@ const getMenus = async (url) => {
         
         //Подсчет финального количества товаров
         finalAmount += parseInt(amountArr[i].textContent);
+        
         //Вывод финального количества товаров
         document.getElementsByClassName('header__product-amount')[0].textContent = finalAmount;
 
@@ -422,6 +489,13 @@ const getMenus = async (url) => {
         `;
       }
         
+    }
+
+    if(finalAmount > 0){
+      document.getElementsByClassName('preview__empty-text')[0].style.display = 'none';
+    }else{
+      document.getElementsByClassName('preview__empty-text')[0].style.display = 'block';
+      document.getElementById('orderFinal').style.display = 'none';
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -441,7 +515,6 @@ const getMenus = async (url) => {
       let productPrice = parseInt(orderedProduct.price.slice(0, -1));
       finalPrice += productPrice * orderedProduct.amount;
     });
-    document.querySelector('[name=amount]').setAttribute('value', finalPrice)
 
     document.getElementById('finalPrice').textContent = finalPrice + 'р'; 
     
@@ -450,6 +523,7 @@ const getMenus = async (url) => {
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //Проверка заказанных товаров на наличие в таблице (на случай изменений в коде элемента)
   const submitBtn = document.getElementById('submitBtn').addEventListener('click', function(){
+    let isOk = true;
     //Отключаем кнопку для предотвращения спама
     document.getElementById('submitBtn').setAttribute("disabled", "disabled");
 
@@ -464,11 +538,11 @@ const getMenus = async (url) => {
         menu.forEach(function(product){
           if(orderedProduct.title === product.title){
 
-            console.log(`${orderedProduct.title} was finded`);
+            //console.log(`${orderedProduct.title} was finded`);
             titleIs = true;
 
             if(parseInt(orderedProduct.price.slice(0, -1)) == product.price){
-              console.log(`${orderedProduct.price} is correct price`);
+              //console.log(`${orderedProduct.price} is correct price`);
               priceIs = true;
             }
           }
@@ -477,51 +551,61 @@ const getMenus = async (url) => {
 
       if(titleIs && priceIs){
         productsPush.push(orderedProduct);
-        console.log('Продукт прошел проверку');
+        //console.log('Продукт прошел проверку');
       }else{
-        console.log('Внешнее вмешательство в код');
+        //console.log('Внешнее вмешательство в код');
+        isOk = false;
       }
 
     });
 
-    //////////////////////////////////////////////////
-    //Отправка заказа в базу данных
-    fetch('https://smartorders-200c8-default-rtdb.firebaseio.com/Praktika/gruzinka/orders.json', {
-      method: 'POST',
-      body: JSON.stringify(productsPush),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-    .then(response => response.json())
-    .then(response => {
-      
-      let date1 = new Date();
+    if(isOk == true){
+      //////////////////////////////////////////////////
+      //Отправка заказа в базу данных
+      fetch('https://smartorders-200c8-default-rtdb.firebaseio.com/Praktika/gruzinka/orders.json', {
+        method: 'POST',
+        body: JSON.stringify(productsPush),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(response => response.json())
+      .then(response => {
+        
+        let date1 = new Date();
 
-      let x = setInterval(function(){
-        let now = new Date().getTime();
+        let x = setInterval(function(){
+          let now = new Date().getTime();
 
-        let distance = now - date1;
+          let distance = now - date1;
 
-        let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+          let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+          let seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-        document.body.innerHTML = `
-        <section class="timer">
-          <div class="container">
-              <div class="timer__title">Время ожидания заказа:</div>
-              <div class="timer__time">
-                ${minutes < 10 ? '0' + minutes : minutes}
-                :
-                ${seconds < 10 ? '0' + seconds : seconds}
-              </div>
-          </div>
-        </section>
+          document.body.innerHTML = `
+          <section class="timer">
+            <div class="container">
+                <div class="timer__title">Время ожидания заказа:</div>
+                <div class="timer__time">
+                  ${minutes < 10 ? '0' + minutes : minutes}
+                  :
+                  ${seconds < 10 ? '0' + seconds : seconds}
+                </div>
+            </div>
+          </section>
+        `
+        }, 1000);
+      })
+    }else{
+      document.body.innerHTML = `
+      <div style="
+        color: red;
+        margin-top: 30vh;
+        text-align: center;
+        font-size: 50px;
+      ">Внешнее вмешательство в код</div>
       `
-
-      }, 1000);
-
-    })
+    }
 
   });
 

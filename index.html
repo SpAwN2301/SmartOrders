@@ -56,10 +56,11 @@
         <div class="container">
             <div class="preview__order">
                 <div class="preview__title">Ваш заказ</div>
+                <div class="preview__empty-text">Вы ещё не сформировали заказ :(<br><br>
+                    Выберите одно из предложенных меню и закажите блюда из необходимых категорий
+                </div>
                 <div class="preview__products" id="cartProducts">
-                    <div class="preview__empty-text">Вы ещё не сформировали заказ :(<br><br>
-                        Выберите одно из предложенных меню и закажите блюда из необходимых категорий
-                    </div>
+                    
                 </div>
                 <div class="preview__final" id="orderFinal">
                     <div class="preview__final-wrapper">
@@ -68,7 +69,7 @@
                     </div>
                     <button type="submit" class="preview__final-btn" id="submitBtn">Оформить заказ</button>
 
-                    <script src="https://securepay.tinkoff.ru/html/payForm/js/tinkoff_v2.js"></script>
+                    <!-- <script src="https://securepay.tinkoff.ru/html/payForm/js/tinkoff_v2.js"></script>
                     <form name="TinkoffPayForm" onsubmit="pay(this); return false;">
                     <input class="tinkoffPayRow" type="hidden" name="terminalkey" value="TinkoffBankTest">
                     <input class="tinkoffPayRow" type="hidden" name="frame" value="false">
@@ -82,7 +83,7 @@
                         <input class="tinkoffPayRow" type="hidden" placeholder="E-mail" name="email">
                         <input class="tinkoffPayRow" type="hidden" placeholder="Контактный телефон" name="phone">
                         <input class="tinkoffPayRow" type="submit" value="Оплатить">
-                    </form>
+                    </form> -->
 
                 </div>
             </div>
