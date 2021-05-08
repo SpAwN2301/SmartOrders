@@ -507,6 +507,9 @@ html {
     align-items: center;
     font-size: 20px;
 }
+.product .product__amount{
+    color: black;
+}
 .product .product__buttons .product__minus, .product .product__buttons .product__plus{
     cursor: pointer;
     outline: none;
